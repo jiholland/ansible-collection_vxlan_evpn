@@ -295,10 +295,10 @@ Example Playbook
 
   roles:
 
-    - role: jiholland.cisco.vpc
+    - role: jiholland.vxlan_evpn.vpc
       when: vpc is defined
 
-    - role: jiholland.cisco.vxlan_evpn
+    - role: jiholland.vxlan_evpn.vxlan_evpn
 ```
 License
 -------
