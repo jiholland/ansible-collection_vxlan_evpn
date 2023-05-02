@@ -50,7 +50,7 @@ Example Playbook
   gather_facts: false
 
   roles:
-    - role: jiholland.cisco.vpc
+    - role: jiholland.vxlan_evpn.vpc
       when: vpc is defined
 ```
 License
