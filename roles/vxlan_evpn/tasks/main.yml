@@ -1,0 +1,113 @@
+---
+# tasks file for vxlan_evpn
+
+- name: Assert that ansible_network_os is cisco.nxos.nxos.
+  tags: always
+  ansible.builtin.assert:
+    that: ansible_network_os is match('cisco.nxos.nxos')
+    msg: ansible_network_os must be cisco.nxos.nxos
+    quiet: true
+
+- name: Enable features.
+  tags: fabric_underlay, fabric_overlay
+  cisco.nxos.nxos_feature:
+    feature: "{{ vxlan_evpn_item }}"
+    state: enabled
+  loop:
+    - ospf
+    - pim
+    - bgp
+    - nv overlay
+    - interface-vlan
+    - vn-segment-vlan-based
+  loop_control:
+    loop_var: vxlan_evpn_item
+
+- name: Configure fabric underlay.
+  tags: fabric_underlay
+  ansible.builtin.include_tasks:
+    file: fabric_underlay_leaf.yml
+    apply:
+      tags: fabric_underlay
+  when: network_role is search('leaf')
+
+- name: Configure fabric underlay.
+  tags: fabric_underlay
+  ansible.builtin.include_tasks:
+    file: fabric_underlay_spine.yml
+    apply:
+      tags: fabric_underlay
+  when: network_role is match('spine')
+
+- name: Configure fabric overlay.
+  tags: fabric_overlay
+  ansible.builtin.include_tasks:
+    file: fabric_overlay_leaf.yml
+    apply:
+      tags: fabric_overlay
+  when: network_role is search('leaf')
+
+- name: Configure fabric overlay.
+  tags: fabric_overlay
+  ansible.builtin.include_tasks:
+    file: fabric_overlay_spine.yml
+    apply:
+      tags: fabric_overlay
+  when: network_role is match('spine')
+
+- name: Configure DCI.
+  when: network_role is match('border-leaf')
+  block:
+
+    - name: Configure DCI underlay.
+      tags: dci_underlay
+      ansible.builtin.include_tasks:
+        file: dci_underlay.yml
+        apply:
+          tags: dci_underlay
+
+    - name: Configure DCI overlay.
+      tags: dci_overlay
+      ansible.builtin.include_tasks:
+        file: dci_overlay.yml
+        apply:
+          tags: dci_overlay
+
+    - name: Configure DCI encryption.
+      tags: dci_encryption
+      ansible.builtin.include_tasks:
+        file: dci_encryption.yml
+        apply:
+          tags: dci_encryption
+
+- name: Add host-segments to VTEPs.
+  when: network_role is search('leaf')
+  block:
+
+    - name: Configure tenant VRFs.
+      tags: vrf
+      ansible.builtin.include_tasks:
+        file: host_vrfs.yml
+        apply:
+          tags: vrf
+
+    - name: Configure host segments with distributed anycast gateway.
+      tags: l3
+      ansible.builtin.include_tasks:
+        file: host_segments_l3.yml
+        apply:
+          tags: l3
+
+    - name: Configure host segments without distributed anycast gateway.
+      tags: l2
+      ansible.builtin.include_tasks:
+        file: host_segments_l2.yml
+        apply:
+          tags: l2
+
+- name: Verify fabric.
+  tags: verify
+  ansible.builtin.include_tasks:
+    file: verify_fabric.yml
+    apply:
+      tags: verify

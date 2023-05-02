@@ -1,0 +1,26 @@
+---
+namespace: jiholland
+name: vxlan_evpn
+version: 23.0.0
+readme: README.md
+
+authors:
+  - Jørn Ivar Holland
+
+description: This collection includes helpful Ansible roles and content to help with Cisco VXLAN-EVPN automation.
+
+license:
+  - BSD-3-Clause
+
+tags:
+  - networking
+
+dependencies:
+  cisco.nxos: ">=4.0.1"
+
+repository: https://github.com/jiholland/ansible-collection_vxlan_evpn
+documentation: https://github.com/jiholland/ansible-collection_vxlan_evpn
+homepage: https://github.com/jiholland
+issues: https://github.com/jiholland/ansible-collection_vxlan_evpn/issues
+
+build_ignore: []

@@ -1,0 +1,10 @@
+---
+# defaults file for vpc
+
+vpc_keepalive_vrf: vpc-keepalive-link
+
+vpc_delay_restore: 150
+vpc_svi_delay_restore: 45
+
+vpc_native_vlan_id: 999
+vpc_native_vlan_name: ANTI_VLAN_HOPPING

@@ -1,0 +1,188 @@
+---
+# tasks file for vpc
+
+- name: Assert that ansible_network_os is cisco.nxos.nxos.
+  ansible.builtin.assert:
+    that: ansible_network_os is match('cisco.nxos.nxos')
+    msg: ansible_network_os must be cisco.nxos.nxos
+    quiet: true
+
+- name: Enable features for vPC.
+  cisco.nxos.nxos_feature:
+    feature: "{{ vpc_item }}"
+    state: enabled
+  loop:
+    - vpc
+    - lacp
+  loop_control:
+    loop_var: vpc_item
+
+- name: Create tenant VRF context for vPC keepalive.
+  cisco.nxos.nxos_vrf:
+    name: "{{ vpc_keepalive_vrf }}"
+    state: present
+  notify: Save nxos.
+
+- name: Associate vPC keepalive interface to tenant VRF.
+  cisco.nxos.nxos_vrf_interface:
+    vrf: "{{ vpc_keepalive_vrf }}"
+    interface: "{{ vpc['keepalive']['if'] }}"
+    state: present
+  notify: Save nxos.
+
+- name: Ensure L3 interface for vPC keepalive link is enabled.
+  cisco.nxos.nxos_interfaces:
+    config:
+      - name: "{{ vpc['keepalive']['if'] }}"
+        mode: layer3
+        enabled: true
+    state: merged
+  notify: Save nxos.
+
+- name: Set IP address on vPC keepalive interface.
+  cisco.nxos.nxos_l3_interfaces:
+    config:
+      - name: "{{ vpc['keepalive']['if'] }}"
+        ipv4:
+          - address: "{{ vpc['keepalive']['ip_src'] }}/24"
+    state: merged
+  notify: Save nxos.
+
+- name: Configure vPC domain with priority and auto-recovery. Ensure keepalive link is configured with existing keepalive VRF. Ensure delay-restore.
+  cisco.nxos.nxos_vpc:
+    domain: "{{ vpc['domain'] }}"
+    pkl_src: "{{ vpc['keepalive']['ip_src'] }}"
+    pkl_dest: "{{ vpc['keepalive']['ip_dest'] }}"
+    pkl_vrf: "{{ vpc_keepalive_vrf }}"
+    role_priority: "{{ vpc['role_priority'] }}"
+    system_priority: 2000
+    peer_gw: true
+    auto_recovery: true
+    delay_restore: "{{ vpc_delay_restore }}"
+    state: present
+  notify: Save nxos.
+
+- name: Ensure vPC domain has peer-switch feature to optimize the STP behavior.
+  cisco.nxos.nxos_config:
+    lines:
+      - peer-switch
+    parents:
+      - vpc domain {{ vpc['domain'] }}
+  notify: Save nxos.
+
+- name: Ensure vPC domain has IP ARP synchronize feature enabled.
+  cisco.nxos.nxos_config:
+    lines:
+      - ip arp synchronize
+      - ipv6 nd synchronize
+    parents:
+      - vpc domain {{ vpc['domain'] }}
+  notify: Save nxos.
+
+- name: Set interface description and L2 mode on vPC peer link interfaces and enable interfaces.
+  cisco.nxos.nxos_interfaces:
+    config:
+      - name: "{{ vpc['peerlink']['lag_name'] }}"
+        description: VPC PEER LINK
+        mode: layer2
+        enabled: true
+      - name: "{{ vpc_item }}"
+        mode: layer2
+        enabled: true
+    state: merged
+  loop: "{{ vpc['peerlink']['lag_members'] }}"
+  loop_control:
+    loop_var: vpc_item
+  notify: Save nxos.
+
+- name: Create native VLAN for vPC peer link interfaces.
+  cisco.nxos.nxos_vlans:
+    config:
+      - vlan_id: "{{ vpc_native_vlan_id }}"
+        name: "{{ vpc_native_vlan_name }}"
+    state: merged
+  notify: Save nxos.
+
+- name: Set vPC peer link interfaces to trunk. Ensure native VLAN.
+  cisco.nxos.nxos_l2_interfaces:
+    config:
+      - name: "{{ vpc['peerlink']['lag_name'] }}"
+        mode: trunk
+        trunk:
+          native_vlan: "{{ vpc_native_vlan_id }}"
+      - name: "{{ vpc_item }}"
+        mode: trunk
+        trunk:
+          native_vlan: "{{ vpc_native_vlan_id }}"
+    state: merged
+  loop: "{{ vpc['peerlink']['lag_members'] }}"
+  loop_control:
+    loop_var: vpc_item
+  notify: Save nxos.
+
+- name: Configure Port-Channel for vPC peer link in mode active and add members to it.
+  cisco.nxos.nxos_lag_interfaces:
+    config:
+      - name: "{{ vpc['peerlink']['lag_name'] }}"
+        members:
+          - member: "{{ vpc_item }}"
+            mode: active
+    state: merged
+  loop: "{{ vpc['peerlink']['lag_members'] }}"
+  loop_control:
+    loop_var: vpc_item
+  notify: Save nxos.
+
+- name: Configure Port-Channel as vPC peer link.
+  cisco.nxos.nxos_vpc_interface:
+    peer_link: true
+    portchannel: "{{ vpc['peerlink']['lag_name'] | regex_search('[0-9]+') }}"  # Extract ID from port-channel.
+    state: present
+  notify: Save nxos.
+
+
+- name: Set STP port type to network for vPC peer link interfaces.
+  block:
+
+    - name: Ensure spanning-tree bridge assurance is enabled.
+      cisco.nxos.nxos_config:
+        lines:
+          - spanning-tree bridge assurance
+      when: not ansible_check_mode
+      notify: Save nxos.
+
+    - name: Set STP port type to network for vPC peer link Port-Channel.
+      cisco.nxos.nxos_config:
+        lines:
+          - spanning-tree port type network
+        parents:
+          - interface {{ vpc['peerlink']['lag_name'] }}
+      notify: Save nxos.
+
+    - name: Set STP port type to network for vPC peer link ethernet interfaces.
+      cisco.nxos.nxos_config:
+        lines:
+          - spanning-tree port type network
+        parents:
+          - interface {{ vpc_item }}
+      loop: "{{ vpc['peerlink']['lag_members'] }}"
+      loop_control:
+        loop_var: vpc_item
+      notify: Save nxos.
+
+
+- name: Modify the STP hello-time, forward-time and max-age time.
+  cisco.nxos.nxos_config:
+    lines:
+      - spanning-tree vlan 1-3967 hello-time 4
+      - spanning-tree vlan 1-3967 forward-time 30
+      - spanning-tree vlan 1-3967 max-age 40
+  notify: Save nxos.
+
+- name: Set delay restore for VLAN SVI.
+  cisco.nxos.nxos_config:
+    lines:
+      - delay restore interface-vlan {{ vpc_svi_delay_restore }}
+    parents:
+      - vpc domain {{ vpc['domain'] }}
+  notify: Save nxos.

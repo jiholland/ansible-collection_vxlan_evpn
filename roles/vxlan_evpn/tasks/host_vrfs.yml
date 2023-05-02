@@ -1,0 +1,13 @@
+---
+# tasks file for vxlan_evpn
+
+- name: host_vrfs | Include variables.
+  ansible.builtin.include_vars:
+    file: "{{ vxlan_evpn_segments_git_dest }}/host_vrfs.yml"
+
+- name: host_vrfs | Configure VRFs.
+  cisco.nxos.nxos_config:
+    src: host_vrfs.j2
+  when: host_vrfs is not match('None')
+  vars:
+    ansible_command_timeout: 1200

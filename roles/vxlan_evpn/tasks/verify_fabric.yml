@@ -1,0 +1,135 @@
+---
+# tasks file for vxlan_evpn
+
+- name: verify_fabric | Verify fabric underlay.
+  block:
+
+    - name: verify_fabric | Get OSPF neighbors.
+      cisco.nxos.nxos_command:
+        commands:
+          - show ip ospf neighbors
+      register: vxlan_evpn_ospf_neighbors
+
+    - name: verify_fabric | Print info about OSPF.
+      ansible.builtin.debug:
+        msg: Spines should be neighbor with all leafs and border-leafs.
+        verbosity: 0
+      run_once: true
+
+    - name: verify_fabric | Print OSPF Neighbors.
+      ansible.builtin.debug:
+        msg:
+          - show ip ospf neighbors
+          - "{{ vxlan_evpn_ospf_neighbors['stdout_lines'][0] }}"
+        verbosity: 0
+
+    - name: verify_fabric | Get PIM neighbors.
+      cisco.nxos.nxos_command:
+        commands:
+          - show ip pim neighbor
+      register: vxlan_evpn_pim_neighbors
+
+    - name: verify_fabric | Print info about PIM.
+      ansible.builtin.debug:
+        msg: Spines should be neighbor with all leafs and border-leafs.
+        verbosity: 0
+      run_once: true
+
+    - name: verify_fabric | Print PIM Neighbors.
+      ansible.builtin.debug:
+        msg:
+          - show ip pim neighbor
+          - "{{ vxlan_evpn_pim_neighbors['stdout_lines'][0] }}"
+        verbosity: 0
+
+
+- name: verify_fabric | Verify fabric overlay.
+  block:
+
+    - name: verify_fabric | Get NVE Peers.
+      cisco.nxos.nxos_command:
+        commands:
+          - show nve peers
+      register: vxlan_evpn_nve_peers
+      when: network_role is search('leaf')
+
+    - name: verify_fabric | Print info about NVE peers.
+      ansible.builtin.debug:
+        msg: You will not see any peers before hosts-traffic has been initiated between peers.
+        verbosity: 0
+      run_once: true
+      when: network_role is search('leaf')
+
+    - name: verify_fabric | Print NVE Peers.
+      ansible.builtin.debug:
+        msg:
+          - show nve peers
+          - "{{ vxlan_evpn_nve_peers['stdout_lines'][0] }}"
+        verbosity: 0
+      when: network_role is search('leaf')
+
+
+    - name: verify_fabric | Get EVPN BGP neigbors.
+      cisco.nxos.nxos_command:
+        commands:
+          - show bgp l2vpn evpn summary
+      register: vxlan_evpn_bgp_neighbors
+
+    - name: verify_fabric | Print info about EVPN BGP neighbors.
+      ansible.builtin.debug:
+        msg:
+          - Spine (RR) should see all leafs and border-leafs as neighbors.
+          - Border-leafs should also see remote border-leafs in separate BGP AS as neighbors.
+        verbosity: 0
+      run_once: true
+
+    - name: verify_fabric | Print EVPN BGP neighbors.
+      ansible.builtin.debug:
+        msg:
+          - show bgp l2vpn evpn summary
+          - "{{ vxlan_evpn_bgp_neighbors['stdout_lines'][0] }}"
+        verbosity: 0
+
+
+- name: verify_fabric | Verify the VXLAN configuration.
+  when: network_role is search('leaf')
+  block:
+
+    - name: verify_fabric | Run VXLAN config-check.
+      cisco.nxos.nxos_command:
+        commands:
+          - show consistency-checker vxlan config-check
+      register: vxlan_evpn_config_check
+      vars:
+        ansible_command_timeout: 60
+
+    - name: verify_fabric | Print VXLAN config-check.
+      ansible.builtin.debug:
+        msg:
+          - show consistency-checker vxlan config-check
+          - "{{ vxlan_evpn_config_check['stdout_lines'][0] }}"
+        verbosity: 0
+
+
+- name: verify_fabric | Verify DCI encryption.
+  when: network_role is match('border-leaf')
+  block:
+
+    - name: verify_fabric | Get MKA summary information.
+      cisco.nxos.nxos_command:
+        commands:
+          - show macsec mka summary
+      register: vxlan_evpn_macsec_mka_summary
+
+    - name: verify_fabric | Print info about macsec.
+      ansible.builtin.debug:
+        msg: DCI interfaces should have status Secured.
+        verbosity: 0
+      run_once: true
+
+    - name: verify_fabric | Print macsec mka summary.
+      ansible.builtin.debug:
+        msg:
+          - show macsec mka summary
+          - "{{ vxlan_evpn_macsec_mka_summary['stdout_lines'][0] }}"
+        verbosity: 0

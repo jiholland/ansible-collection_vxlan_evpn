@@ -1,0 +1,140 @@
+---
+# tasks file for vxlan_evpn
+
+- name: fabric_underlay_spine | Create and enable L3 RID and pim loopback fabric interfaces. Ensure interface-description.
+  cisco.nxos.nxos_interfaces:
+    config:
+      - name: "{{ vxlan['rid']['if'] }}"
+        description: "{{ vxlan['rid']['description'] }}"
+        enabled: true
+      - name: "{{ vxlan['pim']['if'] }}"
+        description: "{{ vxlan['pim']['description'] }}"
+        enabled: true
+    state: merged
+  notify: Save nxos.
+
+- name: fabric_underlay_spine | Enable and set physical fabric interfaces in L3 mode. Ensure jumbo MTU.
+  cisco.nxos.nxos_interfaces:
+    config:
+      - name: "{{ vxlan_evpn_item['name'] }}"
+        mode: layer3
+        mtu: "{{ vxlan_evpn_mtu }}"
+        enabled: true
+    state: merged
+  loop: "{{ vxlan['fabric_interfaces'] }}"
+  loop_control:
+    loop_var: vxlan_evpn_item
+    label: "{{ vxlan_evpn_item['name'] }}"
+  notify: Save nxos.
+
+- name: fabric_underlay_spine | Assign IP address and tag to L3 RID and pim loopback fabric interfaces.
+  cisco.nxos.nxos_l3_interfaces:
+    config:
+      - name: "{{ vxlan['rid']['if'] }}"
+        ipv4:
+          - address: "{{ vxlan['rid']['ip'] }}/32"
+      - name: "{{ vxlan['pim']['if'] }}"
+        ipv4:
+          - address: "{{ vxlan_evpn_pim_anycast_rp_ip }}/32"
+    state: merged
+  notify: Save nxos.
+
+- name: fabric_underlay_spine | Ensure physical L3 fabric interfaces have medium p2p and IP unnumbered parameters.
+  cisco.nxos.nxos_config:
+    lines:
+      - medium p2p
+      - ip unnumbered {{ vxlan['rid']['if'] }}
+    parents:
+      - interface {{ vxlan_evpn_item['name'] }}
+  loop: "{{ vxlan['fabric_interfaces'] }}"
+  loop_control:
+    loop_var: vxlan_evpn_item
+    label: "{{ vxlan_evpn_item['name'] }}"
+  notify: Save nxos.
+
+- name: fabric_underlay_spine | Set OSPF Process-ID and Router-ID and log adjacency changes.
+  cisco.nxos.nxos_ospfv2:
+    config:
+      processes:
+        - process_id: "{{ vxlan_evpn_ospf_process_id }}"
+          router_id: "{{ vxlan['rid']['ip'] }}"
+          log_adjacency_changes:
+            detail: true
+    state: merged
+  notify: Save nxos.
+
+- name: fabric_underlay_spine | Associate L3 RID and pim loopback interfaces with OSFP process.
+  cisco.nxos.nxos_ospf_interfaces:
+    config:
+      - name: "{{ vxlan['rid']['if'] }}"
+        address_family:
+          - afi: ipv4
+            processes:
+              - process_id: "{{ vxlan_evpn_ospf_process_id }}"
+                area:
+                  area_id: "{{ vxlan_evpn_ospf_area_id }}"
+      - name: "{{ vxlan['pim']['if'] }}"
+        address_family:
+          - afi: ipv4
+            processes:
+              - process_id: "{{ vxlan_evpn_ospf_process_id }}"
+                area:
+                  area_id: "{{ vxlan_evpn_ospf_area_id }}"
+    state: merged
+  notify: Save nxos.
+
+- name: fabric_underlay_spine | Associate L3 fabric p2p interfaces with OSFP process.
+  cisco.nxos.nxos_ospf_interfaces:
+    config:
+      - name: "{{ vxlan_evpn_item['name'] }}"
+        address_family:
+          - afi: ipv4
+            network: point-to-point
+            processes:
+              - process_id: "{{ vxlan_evpn_ospf_process_id }}"
+                area:
+                  area_id: "{{ vxlan_evpn_ospf_area_id }}"
+    state: merged
+  loop: "{{ vxlan['fabric_interfaces'] }}"
+  loop_control:
+    loop_var: vxlan_evpn_item
+    label: "{{ vxlan_evpn_item['name'] }}"
+  notify: Save nxos.
+
+- name: fabric_underlay_spine | Configure PIM RP in Anycast-RP set.
+  cisco.nxos.nxos_config:
+    lines:
+      - ip pim anycast-rp {{ vxlan_evpn_pim_anycast_rp_ip }} {{ vxlan['pim']['anycast']['local'] }}
+      - ip pim anycast-rp {{ vxlan_evpn_pim_anycast_rp_ip }} {{ vxlan['pim']['anycast']['remote'] }}
+  notify: Save nxos.
+
+- name: fabric_underlay_spine | Configure static PIM anycast RP for group range.
+  cisco.nxos.nxos_pim_rp_address:
+    rp_address: "{{ vxlan_evpn_pim_anycast_rp_ip }}"
+    group_list: "{{ vxlan_evpn_pim_group_range }}"
+    state: present
+  notify: Save nxos.
+
+- name: fabric_underlay_spine | Ensure PIM sparse mode is running on L3 RID loopback interface.
+  cisco.nxos.nxos_pim_interface:
+    interface: "{{ vxlan['rid']['if'] }}"
+    sparse: true
+    state: present
+  notify: Save nxos.
+
+- name: fabric_underlay_spine | Ensure PIM sparse mode is running on L3 PIM loopback interface.
+  cisco.nxos.nxos_pim_interface:
+    interface: "{{ vxlan['pim']['if'] }}"
+    sparse: true
+  notify: Save nxos.
+
+- name: fabric_underlay_spine | Ensure PIM sparse mode is running on L3 fabric interfaces.
+  cisco.nxos.nxos_pim_interface:
+    interface: "{{ vxlan_evpn_item['name'] }}"
+    sparse: true
+    state: present
+  loop: "{{ vxlan['fabric_interfaces'] }}"
+  loop_control:
+    loop_var: vxlan_evpn_item
+    label: "{{ vxlan_evpn_item['name'] }}"
+  notify: Save nxos.

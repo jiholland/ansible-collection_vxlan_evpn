@@ -1,0 +1,26 @@
+{% for item in host_segments_l3 %}
+vlan {{ item['vlan_id'] }}
+  name {{ item['vlan_name'] }}
+  vn-segment {{ item['vni_id'] }}
+!
+interface Vlan{{ item['vlan_id'] }}
+ vrf member {{ item['vrf'] }}
+ mtu {{ vxlan_evpn_mtu }}
+ fabric forwarding mode anycast-gateway
+ ip address {{ item['vlan_svi_ip'] }} tag {{ vxlan_evpn_rmap_host_svi_tag }}
+ no ip redirects
+ no shutdown
+!
+interface nve1
+  member vni {{ item['vni_id'] }}
+    suppress-arp
+{% if network_role is match('border-leaf') %}
+    multisite ingress-replication
+{% endif %}
+!
+evpn
+  vni {{ item['vni_id'] }} l2
+    rd auto
+    route-target import auto
+    route-target export auto
+{% endfor %}

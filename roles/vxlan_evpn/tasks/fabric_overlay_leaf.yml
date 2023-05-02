@@ -1,0 +1,100 @@
+---
+# tasks file for vxlan_evpn
+
+- name: fabric_overlay_leaf | Enable EVPN control plane for VXLAN.
+  cisco.nxos.nxos_evpn_global:
+    nv_overlay_evpn: true
+  notify: Save nxos.
+
+- name: fabric_overlay_leaf | Configure BGP ASN, Router-ID and neighbors.
+  cisco.nxos.nxos_bgp_global:
+    config:
+      as_number: "{{ vxlan['bgp']['asn'] }}"
+      router_id: "{{ vxlan['rid']['ip'] }}"
+      log_neighbor_changes: true
+      neighbors:
+        - neighbor_address: "{{ vxlan_evpn_item['ip'] }}"
+          remote_as: "{{ vxlan['bgp']['asn'] }}"
+          description: "{{ vxlan_evpn_item['name'] }}"
+          update_source: "{{ vxlan['rid']['if'] }}"
+    state: merged
+  loop: "{{ vxlan['bgp']['neighbors'] }}"
+  loop_control:
+    loop_var: vxlan_evpn_item
+    label: BGP neighbor {{ vxlan_evpn_item['name'] }}
+  notify: Save nxos.
+
+- name: fabric_overlay_leaf | Configure L2VPN EVPN for BGP neighbors. Set address-family to EVPN. Define leafs as RR clients under BGP process.
+  cisco.nxos.nxos_bgp_neighbor_address_family:
+    config:
+      as_number: "{{ vxlan['bgp']['asn'] }}"
+      neighbors:
+        - neighbor_address: "{{ vxlan_evpn_item['ip'] }}"
+          address_family:
+            - afi: l2vpn
+              safi: evpn
+              send_community:
+                both: true
+    state: merged
+  loop: "{{ vxlan['bgp']['neighbors'] }}"
+  loop_control:
+    loop_var: vxlan_evpn_item
+    label: BGP neighbor {{ vxlan_evpn_item['name'] }}
+  notify: Save nxos.
+
+
+- name: fabric_overlay_leaf | Create route-map to redistribute Host-SVI (Silent Host).
+  cisco.nxos.nxos_route_maps:
+    config:
+      - route_map: "{{ vxlan_evpn_rmap_host_svi_name }}"
+        entries:
+          - sequence: 10
+            action: permit
+            match:
+              tags: "{{ vxlan_evpn_rmap_host_svi_tag }}"
+    state: merged
+  notify: Save nxos.
+
+
+- name: fabric_overlay_leaf | VTEP configuration.
+  block:
+
+    - name: fabric_overlay_leaf | Configure anycast gateway MAC address for distributed routing.
+      cisco.nxos.nxos_overlay_global:
+        anycast_gateway_mac: "{{ vxlan_evpn_anycast_gw_mac }}"
+      notify: Save nxos.
+
+    - name: fabric_overlay_leaf | Create VXLAN VTEP (NVE) interface for BGP EVPN control plane. Use BGP for host reachability. Enable interface.
+      cisco.nxos.nxos_vxlan_vtep:
+        interface: nve1
+        description: "*** VXLAN VTEP ***"
+        source_interface: "{{ vxlan['vtep']['if'] }}"
+        host_reachability: true
+        global_mcast_group_L2: "{{ vxlan_evpn_global_mcast_group_l2 }}"
+        shutdown: false
+        state: present
+      notify: Save nxos.
+
+
+- name: fabric_overlay_leaf | Configure vPC multihoming.
+  when: vpc is defined
+  block:
+
+    - name: fabric_overlay_leaf | Advertise PIP in BGP process.
+      cisco.nxos.nxos_bgp_address_family:
+        config:
+          as_number: "{{ vxlan['bgp']['asn'] }}"
+          address_family:
+            - afi: l2vpn
+              safi: evpn
+              advertise_pip: true
+        state: merged
+      notify: Save nxos.
+
+    - name: fabric_overlay_leaf | Advertise virtual-rmac in NVE interface.
+      cisco.nxos.nxos_config:
+        lines:
+          - advertise virtual-rmac  # Enter shutdown, no shutdown to take effect.
+        parents:
+          - interface nve1
+      notify: Save nxos.

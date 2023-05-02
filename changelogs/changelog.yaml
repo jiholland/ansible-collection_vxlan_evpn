@@ -1,0 +1,8 @@
+ancestor: null
+releases:
+  23.0.0:
+    changes:
+      release_summary: First release.
+    fragments:
+    - fix.yml
+    release_date: '2023-05-02'

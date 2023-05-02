@@ -1,0 +1,7 @@
+---
+# handlers file for vpc
+
+- name: Save nxos.
+  cisco.nxos.nxos_config:
+    save_when: always
+  when: not ansible_check_mode

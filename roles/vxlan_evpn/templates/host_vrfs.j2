@@ -1,0 +1,30 @@
+{% for item in host_vrfs %}
+system vlan nve-overlay id {{ item['vlan_id'] }}
+vlan {{ item['vlan_id'] }}
+  vn-segment {{ item['vni_id'] }}
+!
+vrf context {{ item['vrf'] }}
+  vni {{ item['vni_id'] }}
+  rd auto
+  address-family ipv4 unicast
+    route-target both auto evpn
+!
+interface Vlan{{ item['vlan_id'] }}
+  description L3 VNI FOR {{ item['vrf'] }}
+  no shutdown
+  mtu {{ vxlan_evpn_mtu }}
+  vrf member {{ item['vrf'] }}
+  no ip redirects
+  ip forward
+  no ipv6 redirects
+!
+interface nve1
+  member vni {{ item['vni_id'] }} associate-vrf
+!
+router bgp {{ vxlan['bgp']['asn'] }}
+  vrf {{ item['vrf'] }}
+    address-family ipv4 unicast
+      advertise l2vpn evpn
+      redistribute direct route-map {{ vxlan_evpn_rmap_host_svi_name }}
+      maximum-paths 64
+{% endfor %}

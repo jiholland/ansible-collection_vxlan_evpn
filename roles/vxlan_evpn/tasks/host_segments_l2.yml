@@ -1,0 +1,13 @@
+---
+# tasks file for vxlan_evpn
+
+- name: host_segments_l2 | Include variables.
+  ansible.builtin.include_vars:
+    file: "{{ vxlan_evpn_segments_git_dest }}/host_segments_l2.yml"
+
+- name: host_segments_l2 | Configure l2 host segments.
+  cisco.nxos.nxos_config:
+    src: host_segments_l2.j2
+  when: host_segments_l2 is not match('None')
+  vars:
+    ansible_command_timeout: 1200
