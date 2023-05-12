@@ -51,14 +51,14 @@
         commands:
           - show nve peers
       register: vxlan_evpn_nve_peers
-      when: network_role is search('leaf')
+      when: network_role is ansible.builtin.search('leaf')
 
     - name: verify_fabric | Print info about NVE peers.
       ansible.builtin.debug:
         msg: You will not see any peers before hosts-traffic has been initiated between peers.
         verbosity: 0
       run_once: true
-      when: network_role is search('leaf')
+      when: network_role is ansible.builtin.search('leaf')
 
     - name: verify_fabric | Print NVE Peers.
       ansible.builtin.debug:
@@ -66,7 +66,7 @@
           - show nve peers
           - "{{ vxlan_evpn_nve_peers['stdout_lines'][0] }}"
         verbosity: 0
-      when: network_role is search('leaf')
+      when: network_role is ansible.builtin.search('leaf')
 
 
     - name: verify_fabric | Get EVPN BGP neigbors.
@@ -92,7 +92,7 @@
 
 
 - name: verify_fabric | Verify the VXLAN configuration.
-  when: network_role is search('leaf')
+  when: network_role is ansible.builtin.search('leaf')
   block:
 
     - name: verify_fabric | Run VXLAN config-check.
@@ -112,7 +112,7 @@
 
 
 - name: verify_fabric | Verify DCI encryption.
-  when: network_role is match('border-leaf')
+  when: network_role is eq('border-leaf')
   block:
 
     - name: verify_fabric | Get MKA summary information.
