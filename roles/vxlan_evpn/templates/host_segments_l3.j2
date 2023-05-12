@@ -14,7 +14,7 @@ interface Vlan{{ item['vlan_id'] }}
 interface nve1
   member vni {{ item['vni_id'] }}
     suppress-arp
-{% if network_role is match('border-leaf') %}
+{% if network_role is eq('border-leaf') %}
     multisite ingress-replication
 {% endif %}
 !

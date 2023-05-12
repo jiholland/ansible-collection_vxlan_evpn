@@ -8,6 +8,6 @@
 - name: host_vrfs | Configure VRFs.
   cisco.nxos.nxos_config:
     src: host_vrfs.j2
-  when: host_vrfs is not match('None')
+  when: host_vrfs is not eq(None)
   vars:
     ansible_command_timeout: 1200

@@ -4,7 +4,7 @@
 - name: Assert that ansible_network_os is cisco.nxos.nxos.
   tags: always
   ansible.builtin.assert:
-    that: ansible_network_os is match('cisco.nxos.nxos')
+    that: ansible_network_os is eq('cisco.nxos.nxos')
     msg: ansible_network_os must be cisco.nxos.nxos
     quiet: true
 
@@ -29,7 +29,7 @@
     file: fabric_underlay_leaf.yml
     apply:
       tags: fabric_underlay
-  when: network_role is search('leaf')
+  when: network_role is ansible.builtin.search('leaf')
 
 - name: Configure fabric underlay.
   tags: fabric_underlay
@@ -37,7 +37,7 @@
     file: fabric_underlay_spine.yml
     apply:
       tags: fabric_underlay
-  when: network_role is match('spine')
+  when: network_role is eq('spine')
 
 - name: Configure fabric overlay.
   tags: fabric_overlay
@@ -45,7 +45,7 @@
     file: fabric_overlay_leaf.yml
     apply:
       tags: fabric_overlay
-  when: network_role is search('leaf')
+  when: network_role is ansible.builtin.search('leaf')
 
 - name: Configure fabric overlay.
   tags: fabric_overlay
@@ -53,10 +53,10 @@
     file: fabric_overlay_spine.yml
     apply:
       tags: fabric_overlay
-  when: network_role is match('spine')
+  when: network_role is eq('spine')
 
 - name: Configure DCI.
-  when: network_role is match('border-leaf')
+  when: network_role is eq('border-leaf')
   block:
 
     - name: Configure DCI underlay.
@@ -81,7 +81,9 @@
           tags: dci_encryption
 
 - name: Add host-segments to VTEPs.
-  when: network_role is search('leaf')
+  when:
+    - not ansible_check_mode
+    - network_role is ansible.builtin.search('leaf')
   block:
 
     - name: Configure tenant VRFs.

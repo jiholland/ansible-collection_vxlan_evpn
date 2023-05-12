@@ -3,7 +3,7 @@
 
 - name: Assert that ansible_network_os is cisco.nxos.nxos.
   ansible.builtin.assert:
-    that: ansible_network_os is match('cisco.nxos.nxos')
+    that: ansible_network_os is eq('cisco.nxos.nxos')
     msg: ansible_network_os must be cisco.nxos.nxos
     quiet: true
 
@@ -136,7 +136,7 @@
 - name: Configure Port-Channel as vPC peer link.
   cisco.nxos.nxos_vpc_interface:
     peer_link: true
-    portchannel: "{{ vpc['peerlink']['lag_name'] | regex_search('[0-9]+') }}"  # Extract ID from port-channel.
+    portchannel: "{{ vpc['peerlink']['lag_name'] | ansible.builtin.regex_search('[0-9]+') }}"  # Extract ID from port-channel.
     state: present
   notify: Save nxos.
 

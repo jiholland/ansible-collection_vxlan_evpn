@@ -8,6 +8,6 @@
 - name: host_segments_l3 | Configure l3 host segments.
   cisco.nxos.nxos_config:
     src: host_segments_l3.j2
-  when: host_segments_l3 is not match('None')
+  when: host_segments_l3 is not eq(None)
   vars:
     ansible_command_timeout: 1200
