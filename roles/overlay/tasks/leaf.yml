@@ -1,0 +1,81 @@
+---
+# tasks file for overlay
+
+- name: leaf | Enable features.
+  cisco.nxos.nxos_feature:
+    feature: "{{ overlay_item }}"
+    state: enabled
+  loop:
+    - nv overlay
+    - bgp
+    - vn-segment-vlan-based
+  loop_control:
+    loop_var: overlay_item
+
+- name: leaf | Enable EVPN control plane for VXLAN.
+  cisco.nxos.nxos_evpn_global:
+    nv_overlay_evpn: true
+  notify: Save nxos.
+
+- name: leaf | Configure BGP ASN, Router-ID and neighbors.
+  cisco.nxos.nxos_bgp_global:
+    config: "{{ lookup('ansible.builtin.template', 'bgp_global.j2') | ansible.builtin.from_yaml }}"
+    state: merged
+  notify: Save nxos.
+
+- name: leaf | Configure L2VPN EVPN for BGP neighbors. Set address-family to EVPN.
+  cisco.nxos.nxos_bgp_neighbor_address_family:
+    config: "{{ lookup('ansible.builtin.template', 'bgp_neighbors.j2') | ansible.builtin.from_yaml }}"
+    state: merged
+  notify: Save nxos.
+
+- name: leaf | Create route-map to redistribute Host-SVI (Silent Host).
+  cisco.nxos.nxos_route_maps:
+    config:
+      - route_map: "{{ overlay_rmap_host_svi_name }}"
+        entries:
+          - sequence: 10
+            action: permit
+            match:
+              tags: "{{ overlay_rmap_host_svi_tag }}"
+    state: merged
+  notify: Save nxos.
+
+- name: leaf | Configure anycast gateway MAC address for distributed routing.
+  cisco.nxos.nxos_overlay_global:
+    anycast_gateway_mac: "{{ overlay_anycast_gw_mac }}"
+  notify: Save nxos.
+
+- name: leaf | Create VXLAN VTEP (NVE) interface for BGP EVPN control plane. Use BGP for host reachability. Enable interface.
+  cisco.nxos.nxos_vxlan_vtep:
+    interface: nve1
+    description: VXLAN VTEP
+    source_interface: "{{ overlay_vtep_if }}"
+    host_reachability: true
+    global_mcast_group_L2: "{{ overlay_global_mcast_group_l2 }}"
+    shutdown: false
+    state: present
+  notify: Save nxos.
+
+- name: leaf | Configure vPC multihoming.
+  when: vpc_domain is defined
+  block:
+
+    - name: leaf | Advertise PIP in BGP process.
+      cisco.nxos.nxos_bgp_address_family:
+        config:
+          as_number: "{{ overlay_bgp_asn }}"
+          address_family:
+            - afi: l2vpn
+              safi: evpn
+              advertise_pip: true
+        state: merged
+      notify: Save nxos.
+
+    - name: leaf | Advertise virtual-rmac in NVE interface.
+      cisco.nxos.nxos_config:
+        lines:
+          - advertise virtual-rmac  # Enter shutdown, no shutdown to take effect.
+        parents:
+          - interface nve1
+      notify: Save nxos.
