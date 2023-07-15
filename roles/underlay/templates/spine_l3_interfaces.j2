@@ -1,0 +1,6 @@
+- name: {{ underlay_rid_if }}
+  ipv4:
+    - address: {{ underlay_rid_ip }}/{{ underlay_rid_mask }}
+- name: {{ underlay_pim_if }}
+  ipv4:
+    - address: {{ underlay_pim_ip }}/{{ underlay_pim_mask }}

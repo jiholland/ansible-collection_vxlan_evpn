@@ -1,0 +1,19 @@
+- name: {{ underlay_rid_if }}
+  description: {{ underlay_rid_desc }}
+  enabled: true
+{% if network_role is ansible.builtin.search('leaf') %}
+- name: {{ underlay_vtep_if }}
+  description: {{ underlay_vtep_desc }}
+  enabled: true
+{% endif %}
+{% if network_role is eq('spine') %}
+- name: {{ underlay_pim_if }}
+  description: {{ underlay_pim_desc }}
+  enabled: true
+{% endif %}
+{% for underlay_item in underlay_interfaces %}
+- name: {{ underlay_item['name'] }}
+  mtu: {{ underlay_mtu }}
+  mode: layer3
+  enabled: true
+{% endfor %}

@@ -1,0 +1,28 @@
+---
+# defaults file for underlay
+
+underlay_interfaces: "{{ fabric_interfaces }}"
+
+underlay_mtu: 9216
+
+underlay_rid_desc: "{{ rid_desc }}"
+underlay_rid_if: "{{ rid_if }}"
+underlay_rid_ip: "{{ rid_ip }}"
+underlay_rid_mask: 32
+
+underlay_vtep_desc: "{{ vtep_desc }}"
+underlay_vtep_if: "{{ vtep_if }}"
+underlay_vtep_ip: "{{ vtep_ip }}"
+underlay_vtep_secondary_ip: "{{ vtep_secondary_ip }}"
+underlay_vtep_mask: 32
+
+underlay_pim_desc: "{{ pim_desc }}"
+underlay_pim_if: "{{ pim_if }}"
+underlay_pim_ip: "{{ pim_ip }}"  # Anycast RP address.
+underlay_pim_mask: 32
+underlay_pim_local_ip: "{{ pim_local_ip }}"
+underlay_pim_remote_ip: "{{ pim_remote_ip }}"
+underlay_pim_group_range: 239.239.0.0/16
+
+underlay_ospf_area_id: 0.0.0.0
+underlay_ospf_process_id: UNDERLAY

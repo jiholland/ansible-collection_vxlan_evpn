@@ -1,0 +1,35 @@
+- name: {{ underlay_rid_if }}
+  address_family:
+    - afi: ipv4
+      processes:
+        - process_id: {{ underlay_ospf_process_id }}
+          area:
+            area_id: {{ underlay_ospf_area_id }}
+{% if network_role is ansible.builtin.search('leaf') %}
+- name: {{ underlay_vtep_if }}
+  address_family:
+    - afi: ipv4
+      processes:
+        - process_id: {{ underlay_ospf_process_id }}
+          area:
+            area_id: {{ underlay_ospf_area_id }}
+{% endif %}
+{% if network_role is eq('spine') %}
+- name: {{ underlay_pim_if }}
+  address_family:
+    - afi: ipv4
+      processes:
+        - process_id: {{ underlay_ospf_process_id }}
+          area:
+            area_id: {{ underlay_ospf_area_id }}
+{% endif %}
+{% for underlay_item in underlay_interfaces %}
+- name: {{ underlay_item['name'] }}
+  address_family:
+    - afi: ipv4
+      network: point-to-point
+      processes:
+        - process_id: {{ underlay_ospf_process_id }}
+          area:
+            area_id: {{ underlay_ospf_area_id }}
+{% endfor %}

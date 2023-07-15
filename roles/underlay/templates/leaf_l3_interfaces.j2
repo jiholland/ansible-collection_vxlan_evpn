@@ -1,0 +1,13 @@
+- name: {{ underlay_rid_if }}
+  ipv4:
+    - address: {{ underlay_rid_ip }}/{{ underlay_rid_mask }}
+      tag: {{ underlay_rid_tag }}
+- name: {{ underlay_vtep_if }}
+  ipv4:
+    - address: {{ underlay_vtep_ip }}/{{ underlay_vtep_mask }}
+      tag: {{ underlay_vtep_tag }}
+{% if vpc is defined %}
+    - address: {{ underlay_vtep_secondary_ip }}/{{ underlay_vtep_mask }}
+      secondary: true
+      tag: {{ underlay_vtep_tag }}
+{% endif %}
