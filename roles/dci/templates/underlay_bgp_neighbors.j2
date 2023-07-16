@@ -1,0 +1,8 @@
+{% for dci_item in dci_bgp_neighbors %}
+as_number: {{ dci_bgp_asn }}
+neighbors:
+  - neighbor_address: {{ dci_item['bgp_neighbor_ip'] }}
+    address_family:
+      - afi: ipv4
+        safi: unicast
+{% endfor %}

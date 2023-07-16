@@ -1,0 +1,11 @@
+{% for dci_item in dci_ebgp_neighbors %}
+as_number: {{ dci_bgp_asn }}
+neighbors:
+  - neighbor_address: {{ dci_item['ip'] }}
+    address_family:
+      - afi: l2vpn
+        safi: evpn
+        send_community:
+          both: true
+        rewrite_evpn_rt_asn: true
+{% endfor %}

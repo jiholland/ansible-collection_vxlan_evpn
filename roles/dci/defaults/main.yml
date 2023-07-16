@@ -1,0 +1,17 @@
+---
+# defaults file for dci
+
+dci_ospf_area_id: 0.0.0.0
+dci_ospf_process_id: UNDERLAY
+
+dci_mtu: 9216
+
+dci_macsec_key: abc3000000000000000000000000000000000000000000000000000000000000  # Change and encrypt with Ansible vault
+
+dci_bgp_asn: "{{ bgp_asn }}"
+
+dci_rid_if: "{{ rid_if }}"
+dci_rid_ip: "{{ rid_ip }}"
+dci_rid_tag: "{{ rid_tag }}"
+
+dci_fabric_interfaces: "{{ fabric_interfaces }}"

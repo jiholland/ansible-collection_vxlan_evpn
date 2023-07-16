@@ -1,0 +1,10 @@
+{% for dci_item in dci_interfaces %}
+as_number: {{ dci_bgp_asn }}
+router_id: {{ dci_rid_ip }}
+log_neighbor_changes: true
+neighbors:
+  - neighbor_address: {{ dci_item['neighbor_ip'] }}
+    remote_as: {{ dci_item['remote_asn'] }}
+    description: {{ dci_item['neighbor_name'] }}
+    update_source: {{ dci_item['name'] }}
+{% endfor %}

@@ -1,0 +1,7 @@
+key chain 1 macsec
+ key 1000
+  key-octet-string {{ dci_macsec_key }} cryptographic-algorithm AES_256_CMAC
+{% for dci_item in dci_interfaces %}
+interface {{ dci_item['name'] }}
+ macsec keychain 1 policy system-default-macsec-policy
+{% endfor %}

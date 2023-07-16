@@ -1,0 +1,79 @@
+---
+# tasks file for dci
+
+- name: underlay | Create and enable L3 DCI loopback interface. Ensure interface-description.
+  cisco.nxos.nxos_interfaces:
+    config:
+      - name: "{{ dci_if }}"
+        description: "{{ dci_desc }}"
+        enabled: true
+    state: merged
+  notify: Save nxos.
+
+- name: underlay | Associate L3 DCI loopback interface with OSFP process.
+  cisco.nxos.nxos_ospf_interfaces:
+    config:
+      - name: "{{ dci_if }}"
+        address_family:
+          - afi: ipv4
+            processes:
+              - process_id: "{{ dci_ospf_process_id }}"
+                area:
+                  area_id: "{{ dci_ospf_area_id }}"
+    state: merged
+  notify: Save nxos.
+
+- name: underlay | Enable and set DCI interfaces in L3 mode. Ensure jumbo MTU.
+  cisco.nxos.nxos_interfaces:
+    config: "{{ lookup('ansible.builtin.template', 'underlay_interfaces.j2') | ansible.builtin.from_yaml }}"
+    state: merged
+  notify: Save nxos.
+
+- name: underlay | Ensure medium p2p for DCI interfacs.
+  cisco.nxos.nxos_config:
+    src: underlay_p2p.j2
+  notify: Save nxos.
+
+- name: underlay | Assign IP address to DCI interfaces.
+  cisco.nxos.nxos_l3_interfaces:
+    config: "{{ lookup('ansible.builtin.template', 'underlay_l3_interfaces.j2') | ansible.builtin.from_yaml }}"
+  notify: Save nxos.
+
+- name: underlay | Configure remote border-leafs as neighbors under BGP process.
+  cisco.nxos.nxos_bgp_global:
+    config: "{{ lookup('ansible.builtin.template', 'underlay_bgp_global.j2') | ansible.builtin.from_yaml }}"
+    state: merged
+  notify: Save nxos.
+
+- name: underlay | Set address-family to IPv4-unicast for border-leaf neighbors under BGP process.
+  cisco.nxos.nxos_bgp_neighbor_address_family:
+    config: "{{ lookup('ansible.builtin.template', 'underlay_bgp_neighbors.j2') | ansible.builtin.from_yaml }}"
+    state: merged
+  notify: Save nxos.
+
+- name: underlay | Create route-map for redistribution of directly connected routes.
+  cisco.nxos.nxos_route_maps:
+    config:
+      - route_map: RMAP-REDIST-DIRECT
+        entries:
+          - sequence: 10
+            action: permit
+            match:
+              tags: "{{ dci_rid_tag }}"
+    state: merged
+  notify: Save nxos.
+
+- name: underlay | Redistribute route-map in IPv4 address-family under BGP. Enable forwarding over multiple paths.
+  cisco.nxos.nxos_bgp_address_family:
+    config:
+      as_number: "{{ dci_bgp_asn }}"
+      address_family:
+        - afi: ipv4
+          safi: unicast
+          maximum_paths:
+            parallel_paths: 4
+          redistribute:
+            - protocol: direct
+              route_map: RMAP-REDIST-DIRECT
+    state: merged
+  notify: Save nxos.

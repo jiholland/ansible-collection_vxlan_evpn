@@ -1,0 +1,43 @@
+---
+# tasks file for dci
+
+- name: overlay | Set multisite ID for fabric. Ensure delay-restore is 300 seconds and advertise pip.
+  cisco.nxos.nxos_config:
+    lines:
+      - delay-restore time 300
+    parents:
+      - evpn multisite border-gateway {{ dci_bgp_asn }}
+  notify: Save nxos.
+
+- name: overlay | Add multisite VIP VTEP loopback to NVE-interface.
+  cisco.nxos.nxos_vxlan_vtep:
+    interface: nve1
+    multisite_border_gateway_interface: "{{ dci_if }}"
+    state: present
+  notify: Save nxos.
+
+- name: overlay | Configure remote border-leafs as neighbors. Ensure peer-type is fabric-external. Increase ttl for eBGP.
+  cisco.nxos.nxos_bgp_global:
+    config: "{{ lookup('ansible.builtin.template', 'overlay_bgp_global.j2') | ansible.builtin.from_yaml }}"
+    state: merged
+  notify: Save nxos.
+
+- name: overlay | Configure EVPN address-family for BGP neighbors.
+  cisco.nxos.nxos_bgp_neighbor_address_family:
+    config: "{{ lookup('ansible.builtin.template', 'overlay_bgp_neighbors.j2') | ansible.builtin.from_yaml }}"
+    state: merged
+  notify: Save nxos.
+
+- name: overlay | Ensure dci-tracking on fabric-external interfaces. Ensure fabric-tracking on fabric-internal interfaces.
+  cisco.nxos.nxos_l3_interfaces:
+    config: "{{ lookup('ansible.builtin.template', 'overlay_l3_interfaces.j2') | ansible.builtin.from_yaml }}"
+    state: merged
+  notify: Save nxos.
+
+- name: overlay | Ensure EVPN multisite storm suppression for DCI interfaces.
+  cisco.nxos.nxos_config:
+    lines:
+      - evpn storm-control unicast level 5
+      - evpn storm-control multicast level 5
+      - evpn storm-control broadcast level 5
+  notify: Save nxos.

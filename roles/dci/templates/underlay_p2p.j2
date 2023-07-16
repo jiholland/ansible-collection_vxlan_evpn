@@ -1,0 +1,4 @@
+{% for dci_item in dci_interfaces %}
+interface {{ dci_item['name'] }}
+ medium p2p
+{% endfor %}
