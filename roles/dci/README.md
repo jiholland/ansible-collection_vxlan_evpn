@@ -2,6 +2,10 @@
 ================
 
 Configure DCI for multisite VXLAN-EVPN fabric on Cisco Nexus platform.
+- Border-leafs in vPC.
+- eBGP in DCI underlay and overlay.
+- Ingress-replication (BUM).
+- MACsec encryption (dark-fiber).
 
 Requirements
 ------------
@@ -84,6 +88,7 @@ Example Playbook
     - role: jiholland.vxlan_evpn.underlay
     - role: jiholland.vxlan_evpn.overlay
     - role: jiholland.vxlan_evpn.dci
+    - role: jiholland.vxlan_evpn.host_segments
     - role: jiholland.vxlan_evpn.verify
 ```
 License

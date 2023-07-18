@@ -2,7 +2,34 @@
 ====================
 
 Configure overlay for multisite VXLAN-EVPN fabric on Cisco Nexus platform.
-
+- iBGP EVPN control plane.
+- Multicast-replication (BUM).
+```YAML
+                         BGP ASN 65001
+        +--------------------+   +--------------------+
+        |      SPINE-1       |   |      SPINE-2       |
+        | RID: 10.250.250.30 |   | RID: 10.250.250.31 |
+        +--------------------+   +--------------------+
+                   | |                      | |
+           +-+-----+-+----------------------+ |
+           | |     +--------Loopback0---------+----+-+
+           | |                                     | |
++--------------------+                             | |
+|       LEAF-1       |                  +--------------------+
+| RID: 10.250.250.32 |                  |       LEAF-2       |
++--------------------+                  | RID: 10.250.250.33 |
++ - - - - - - - - - -                   +--------------------+
+         VTEP        |                  + - - - - - - - - - -
+|     Loopback1                                  VTEP        |
+   10.254.250.32/32  |                  |     Loopback1
+|                                          10.254.250.33/32  |
+ - - - - - - - - - - +                  + - - - - - - - - - -
++ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+                 Distributed Anycast Gateway                 |
+|                    GW IP: 172.16.100.1
+                    GW MAC: 2020.DEAD.BEEF                   |
++ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+```
 Requirements
 ------------
 
@@ -73,6 +100,7 @@ Example Playbook
     - role: jiholland.vxlan_evpn.underlay
     - role: jiholland.vxlan_evpn.overlay
     - role: jiholland.vxlan_evpn.dci
+    - role: jiholland.vxlan_evpn.host_segments
     - role: jiholland.vxlan_evpn.verify
 ```
 License

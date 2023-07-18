@@ -27,6 +27,7 @@ Example Playbook
     - role: jiholland.vxlan_evpn.underlay
     - role: jiholland.vxlan_evpn.overlay
     - role: jiholland.vxlan_evpn.dci
+    - role: jiholland.vxlan_evpn.host_segments
     - role: jiholland.vxlan_evpn.verify
 ```
 License

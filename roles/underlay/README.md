@@ -2,7 +2,28 @@
 =====================
 
 Configure underlay for multisite VXLAN-EVPN fabric on Cisco Nexus platform.
-
+- OSPF routing.
+- P2P L3 links.
+- PIM Sparse with Anycast RP.
+```YAML
+                       OSPF AREA 0.0.0.0
+       + - - - - - - - - - - - - - - - - - - - - - - -
+       |         PIM Anycast RP (Loopback254)         |
+       + - - - - - - - - - - - - - - - - - - - - - - -
+       +--------------------+    +--------------------+
+       |      SPINE-1       |    |      SPINE-2       |
+       | RID: 10.250.250.30 |    | RID: 10.250.250.31 |
+       +--------------------+    +--------------------+
+                | |                       | |
+           +-+--+-+-----------------------+ |
+           | |  +---------Loopback0---------+-----+-+
+           | |                                    | |
++--------------------+                            | |
+|       LEAF-1       |                 +------------+-------+
+| RID: 10.250.250.32 |                 |       LEAF-2       |
++--------------------+                 | RID: 10.250.250.33 |
+                                       +--------------------+
+```
 Requirements
 ------------
 
@@ -70,6 +91,7 @@ Example Playbook
     - role: jiholland.vxlan_evpn.underlay
     - role: jiholland.vxlan_evpn.overlay
     - role: jiholland.vxlan_evpn.dci
+    - role: jiholland.vxlan_evpn.host_segments
     - role: jiholland.vxlan_evpn.verify
 ```
 License

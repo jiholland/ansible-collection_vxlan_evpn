@@ -1,24 +1,11 @@
 ---
-# defaults file for vxlan_evpn
+# defaults file for host_segments
 
-vxlan_evpn_pim_anycast_rp_ip: 10.254.254.254
-vxlan_evpn_pim_group_range: 239.239.0.0/16
+host_segments_mtu: 9216
+host_segments_rmap_host_svi_name: HOST-SVI
+host_segments_rmap_host_svi_tag: 12345
 
-vxlan_evpn_global_mcast_group_l2: 239.239.239.239
-
-vxlan_evpn_macsec_key: abc3000000000000000000000000000000000000000000000000000000000000  # Change and encrypt with Ansible vault
-
-vxlan_evpn_mtu: 9216
-
-vxlan_evpn_ospf_area_id: 0.0.0.0
-vxlan_evpn_ospf_process_id: UNDERLAY
-
-vxlan_evpn_anycast_gw_mac: 2020.DEAD.BEEF
-
-vxlan_evpn_rmap_host_svi_name: HOST-SVI
-vxlan_evpn_rmap_host_svi_tag: 12345
-
-vxlan_evpn_host_vrfs:
+host_segments_vrfs:
   - vrf_name: Tenant-1
     vrf_description: "*** VRF for Tenant-1 ***"
     vni_id: 10010
@@ -33,7 +20,7 @@ vxlan_evpn_host_vrfs:
     vlan_svi_description: "*** L3 VNI FOR TENANT-2 ***"  # Overlay routing in VRF
 
 # Host segments with distributed anycast gateway
-vxlan_evpn_host_segments_l3:
+host_segments_l3:
   - vrf: Tenant-1
     vni_id: 10100
     vlan_id: 100
@@ -54,7 +41,7 @@ vxlan_evpn_host_segments_l3:
     vlan_svi_description: "*** L2 VNI HOST SEGMENT WITH ANYCAST GATEWAY ***"
 
 # Hosts segments without distributed anycast gateway
-vxlan_evpn_host_segments_l2:
+host_segments_l2:
   - vni_id: 10102
     vlan_id: 102
     vlan_name: Mail

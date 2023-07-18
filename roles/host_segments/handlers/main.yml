@@ -1,5 +1,5 @@
 ---
-# handlers file for vxlan_evpn
+# handlers file for host_segments
 
 - name: Save nxos.
   cisco.nxos.nxos_config:
