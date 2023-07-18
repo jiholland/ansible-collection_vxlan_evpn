@@ -6,8 +6,6 @@ dci_ospf_process_id: UNDERLAY
 
 dci_mtu: 9216
 
-dci_macsec_key: abc3000000000000000000000000000000000000000000000000000000000000  # Change and encrypt with Ansible vault
-
 dci_bgp_asn: "{{ bgp_asn }}"
 
 dci_rid_if: "{{ rid_if }}"

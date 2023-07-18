@@ -5,12 +5,10 @@ underlay_interfaces: "{{ fabric_interfaces }}"
 
 underlay_mtu: 9216
 
-underlay_rid_desc: "{{ rid_desc }}"
 underlay_rid_if: "{{ rid_if }}"
 underlay_rid_ip: "{{ rid_ip }}"
 underlay_rid_mask: 32
 
-underlay_vtep_desc: "{{ vtep_desc }}"
 underlay_vtep_if: "{{ vtep_if }}"
 underlay_vtep_ip: "{{ vtep_ip }}"
 underlay_vtep_secondary_ip: "{{ vtep_secondary_ip }}"

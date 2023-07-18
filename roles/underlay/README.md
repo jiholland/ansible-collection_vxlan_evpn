@@ -18,7 +18,6 @@ Example - hostvars/SPINE-1.yml:
 
 network_role: spine
 
-rid_desc: RID AND OSPF/BGP-PEERING
 rid_if: loopback0
 rid_ip: 10.250.250.30
 rid_mask: 32
@@ -43,13 +42,11 @@ Example - hostvars/LEAF-1.yml:
 
 network_role: leaf
 
-rid_desc: RID AND OSPF/BGP-PEERING
 rid_if: loopback0
 rid_ip: 10.250.250.32
 rid_mask: 32
 rid_tag: 54321
 
-vtep_desc: NVE INTERFACE (PIP VTEP)
 vtep_if: loopback1
 vtep_ip: 10.254.250.32
 vtep_mask: 32
