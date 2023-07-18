@@ -1,0 +1,11 @@
+{% for dci_item in dci_ebgp_neighbors %}
+as_number: {{ dci_bgp_asn }}
+router_id: {{ dci_rid_ip }}
+neighbors:
+  - neighbor_address: {{ dci_item['ip'] }}
+    remote_as: {{ dci_item['asn'] }}
+    description: {{ dci_item['name'] }}
+    update_source: {{ dci_rid_if }}
+    peer_type: fabric-external
+    ebgp_multihop: 2
+{% endfor %}

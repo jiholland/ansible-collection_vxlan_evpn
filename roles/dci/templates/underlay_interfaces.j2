@@ -1,0 +1,6 @@
+{% for dci_item in dci_interfaces %}
+- name: {{ dci_item['name'] }}
+  mtu: {{ dci_mtu }}
+  mode: layer3
+  enabled: true
+{% endfor %}

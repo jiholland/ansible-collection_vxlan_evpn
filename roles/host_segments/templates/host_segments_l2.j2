@@ -1,0 +1,18 @@
+{% for host_segments_item in host_segments_l2 %}
+vlan {{ host_segments_item['vlan_id'] }}
+  name {{ host_segments_item['vlan_name'] }}
+  vn-segment {{ host_segments_item['vni_id'] }}
+!
+interface nve1
+  member vni {{ host_segments_item['vni_id'] }}
+    suppress-arp disable
+{% if network_role is eq('border-leaf') %}
+    multisite ingress-replication
+{% endif %}
+!
+evpn
+  vni {{ host_segments_item['vni_id'] }} l2
+    rd auto
+    route-target import auto
+    route-target export auto
+{% endfor %}

@@ -1,34 +1,29 @@
 # Ansible Collection - jiholland.vxlan_evpn
 
-This collection includes helpful Ansible roles and content to help with Cisco VXLAN-EVPN automation.
+This collection configure multisite VXLAN-EVPN fabric on Cisco Nexus platform.
 
 Roles included in this collection (click on the link to see the role's README and documentation):
 
   - `jiholland.vxlan_evpn.vpc`([documentation](https://github.com/jiholland/ansible-collection_vxlan_evpn/blob/main/roles/vpc/README.md))
-  - `jiholland.vxlan_evpn.vxlan_evpn`([documentation](https://github.com/jiholland/ansible-collection_vxlan_evpn/blob/main/roles/vxlan_evpn/README.md))
+  - `jiholland.vxlan_evpn.underlay`([documentation](https://github.com/jiholland/ansible-collection_vxlan_evpn/blob/main/roles/underlay/README.md))
+  - `jiholland.vxlan_evpn.overlay`([documentation](https://github.com/jiholland/ansible-collection_vxlan_evpn/blob/main/roles/overlay/README.md))
+  - `jiholland.vxlan_evpn.dci`([documentation](https://github.com/jiholland/ansible-collection_vxlan_evpn/blob/main/roles/dci/README.md))
+  - `jiholland.vxlan_evpn.host_segments`([documentation](https://github.com/jiholland/ansible-collection_vxlan_evpn/blob/main/roles/host_segments/README.md))
+  - `jiholland.vxlan_evpn.verify`([documentation](https://github.com/jiholland/ansible-collection_vxlan_evpn/blob/main/roles/verify/README.md))
 
 ## Installation
 
 Install via Ansible Galaxy:
 
 ```yaml
-ansible-galaxy collection install git@github.com:jiholland/ansible-collection_vxlan_evpn.git
+ansible-galaxy collection install jiholland.vxlan_evpn
 ```
 
-## Usage
-```YAML
----
-- name: Build VXLAN-EVPN fabric.
-  hosts: "{{ target }}"
-  gather_facts: false
+📚**Resources:**<br>
+- [Cisco Nexus VXLAN configuration guide](https://www.cisco.com/c/en/us/td/docs/dcn/nx-os/nexus9000/102x/configuration/vxlan/cisco-nexus-9000-series-nx-os-vxlan-configuration-guide-release-102x.html)<br>
+- [Cisco VXLAN-EVPN Multi-Site Design and Deployment whitepaper](https://www.cisco.com/c/en/us/products/collateral/switches/nexus-9000-series-switches/white-paper-c11-739942.html#Introduction)<br>
+- [Ansible documentation for Cisco Nexus](https://docs.ansible.com/ansible/latest/collections/cisco/nxos/index.html)<br>
 
-  roles:
-
-    - role: jiholland.vxlan_evpn.vpc
-      when: vpc is defined
-
-    - role: jiholland.vxlan_evpn.vxlan_evpn
-```
 ## License
 
 BSD-3-Clause

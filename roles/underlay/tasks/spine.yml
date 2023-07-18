@@ -1,0 +1,86 @@
+---
+# tasks file for underlay
+
+- name: spine | Enable features.
+  cisco.nxos.nxos_feature:
+    feature: "{{ underlay_item }}"
+    state: enabled
+  loop:
+    - interface-vlan
+    - ospf
+    - pim
+  loop_control:
+    loop_var: underlay_item
+  notify: Save nxos.
+
+- name: spine | Create L3 RID and pim loopbacks. Enable and set physical fabric interfaces in L3 mode. Ensure jumbo MTU.
+  cisco.nxos.nxos_interfaces:
+    config: "{{ lookup('ansible.builtin.template', 'interfaces.j2') | ansible.builtin.from_yaml }}"
+    state: merged
+  notify: Save nxos.
+
+- name: spine | Assign IP address and tag to L3 RID and pim loopback fabric interfaces.
+  cisco.nxos.nxos_l3_interfaces:
+    config: "{{ lookup('ansible.builtin.template', 'spine_l3_interfaces.j2') | ansible.builtin.from_yaml }}"
+    state: merged
+  notify: Save nxos.
+
+- name: spine | Ensure physical L3 fabric interfaces have medium p2p and IP unnumbered parameters.
+  cisco.nxos.nxos_config:
+    src: p2p.j2
+  notify: Save nxos.
+
+- name: spine | Set OSPF Process-ID and Router-ID and log adjacency changes.
+  cisco.nxos.nxos_ospfv2:
+    config:
+      processes:
+        - process_id: "{{ underlay_ospf_process_id }}"
+          router_id: "{{ underlay_rid_ip }}"
+          log_adjacency_changes:
+            detail: true
+    state: merged
+  notify: Save nxos.
+
+- name: spine | Associate fabric interfaces with OSPF process.
+  cisco.nxos.nxos_ospf_interfaces:
+    config: "{{ lookup('ansible.builtin.template', 'ospf_interfaces.j2') | ansible.builtin.from_yaml }}"
+    state: merged
+  notify: Save nxos.
+
+- name: spine | Configure PIM RP in Anycast-RP set.
+  cisco.nxos.nxos_config:
+    lines:
+      - ip pim anycast-rp {{ underlay_pim_ip }} {{ underlay_pim_local_ip }}
+      - ip pim anycast-rp {{ underlay_pim_ip }} {{ underlay_pim_remote_ip }}
+  notify: Save nxos.
+
+- name: spine | Configure static PIM anycast RP for group range.
+  cisco.nxos.nxos_pim_rp_address:
+    rp_address: "{{ underlay_pim_ip }}"
+    group_list: "{{ underlay_pim_group_range }}"
+    state: present
+  notify: Save nxos.
+
+- name: spine | Ensure PIM sparse mode is running on L3 RID loopback interface.
+  cisco.nxos.nxos_pim_interface:
+    interface: "{{ underlay_rid_if }}"
+    sparse: true
+    state: present
+  notify: Save nxos.
+
+- name: spine | Ensure PIM sparse mode is running on L3 PIM loopback interface.
+  cisco.nxos.nxos_pim_interface:
+    interface: "{{ underlay_pim_if }}"
+    sparse: true
+  notify: Save nxos.
+
+- name: spine | Ensure PIM sparse mode is running on L3 fabric interfaces.
+  cisco.nxos.nxos_pim_interface:
+    interface: "{{ underlay_item['name'] }}"
+    sparse: true
+    state: present
+  loop: "{{ underlay_interfaces }}"
+  loop_control:
+    loop_var: underlay_item
+    label: "{{ underlay_item['name'] }}"
+  notify: Save nxos.

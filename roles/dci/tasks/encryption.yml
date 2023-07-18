@@ -1,0 +1,14 @@
+---
+# tasks file for dci
+
+- name: encryption | Enable MACsec feature.
+  cisco.nxos.nxos_feature:
+    feature: macsec
+    state: enabled
+  notify: Save nxos.
+
+- name: encryption | Configure MACsec keychain and key. Apply MACsec policy to DCI-interfaces.
+  cisco.nxos.nxos_config:
+    src: encryption.j2
+  when: not ansible_check_mode
+  no_log: true

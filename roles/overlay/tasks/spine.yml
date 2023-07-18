@@ -1,0 +1,29 @@
+---
+# tasks file for overlay
+
+- name: spine | Enable features.
+  cisco.nxos.nxos_feature:
+    feature: "{{ overlay_item }}"
+    state: enabled
+  loop:
+    - nv overlay
+    - bgp
+  loop_control:
+    loop_var: overlay_item
+
+- name: spine | Enable EVPN control plane for VXLAN.
+  cisco.nxos.nxos_evpn_global:
+    nv_overlay_evpn: true
+  notify: Save nxos.
+
+- name: spine | Configure BGP ASN, Router-ID and neighbors.
+  cisco.nxos.nxos_bgp_global:
+    config: "{{ lookup('ansible.builtin.template', 'bgp_global.j2') | ansible.builtin.from_yaml }}"
+    state: merged
+  notify: Save nxos.
+
+- name: spine | Configure L2VPN EVPN for BGP neighbors. Set address-family to EVPN. Define leafs as RR clients under BGP process.
+  cisco.nxos.nxos_bgp_neighbor_address_family:
+    config: "{{ lookup('ansible.builtin.template', 'bgp_neighbors.j2') | ansible.builtin.from_yaml }}"
+    state: merged
+  notify: Save nxos.

@@ -1,0 +1,27 @@
+---
+# tasks file for host_segments
+
+- name: Add host-segments to VTEPs.
+  when: network_role is ansible.builtin.search('leaf')
+  block:
+
+    - name: Configure tenant VRFs.
+      cisco.nxos.nxos_config:
+        src: host_vrfs.j2
+      notify: Save nxos.
+      vars:
+        ansible_command_timeout: 1200
+
+    - name: Configure host segments with distributed anycast gateway.
+      cisco.nxos.nxos_config:
+        src: host_segments_l3.j2
+      notify: Save nxos.
+      vars:
+        ansible_command_timeout: 1200
+
+    - name: Configure host segments without distributed anycast gateway.
+      cisco.nxos.nxos_config:
+        src: host_segments_l2.j2
+      notify: Save nxos.
+      vars:
+        ansible_command_timeout: 1200
