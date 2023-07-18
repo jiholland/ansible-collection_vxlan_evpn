@@ -6,3 +6,10 @@ releases:
     fragments:
     - fix.yml
     release_date: '2023-05-02'
+  24.0.0:
+    changes:
+      major_changes:
+      - Splitting collection into multiple roles.
+    fragments:
+    - fix.yml
+    release_date: '2023-07-18'
