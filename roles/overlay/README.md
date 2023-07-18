@@ -1,7 +1,7 @@
 🏭 jiholland.overlay
 ====================
 
-Configure multisite VXLAN-EVPN fabric on Cisco Nexus platform.
+Configure overlay for multisite VXLAN-EVPN fabric on Cisco Nexus platform.
 
 Requirements
 ------------

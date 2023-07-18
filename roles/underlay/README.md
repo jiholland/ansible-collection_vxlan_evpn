@@ -1,7 +1,7 @@
 🏭 jiholland.underlay
 =====================
 
-Configure multisite VXLAN-EVPN fabric on Cisco Nexus platform.
+Configure underlay for multisite VXLAN-EVPN fabric on Cisco Nexus platform.
 
 Requirements
 ------------
@@ -69,7 +69,7 @@ Example Playbook
 
   roles:
     - role: jiholland.vxlan_evpn.vpc
-      when: vpc is defined
+      when: vpc_domain is defined
     - role: jiholland.vxlan_evpn.underlay
     - role: jiholland.vxlan_evpn.overlay
     - role: jiholland.vxlan_evpn.dci
