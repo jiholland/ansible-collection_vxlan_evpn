@@ -6,22 +6,13 @@
   block:
 
     - name: Configure DCI underlay.
-      tags: dci
       ansible.builtin.include_tasks:
         file: underlay.yml
-        apply:
-          tags: dci
 
     - name: Configure DCI overlay.
-      tags: dci
       ansible.builtin.include_tasks:
         file: overlay.yml
-        apply:
-          tags: dci
 
     - name: Configure DCI encryption.
-      tags: dci
       ansible.builtin.include_tasks:
         file: encryption.yml
-        apply:
-          tags: dci

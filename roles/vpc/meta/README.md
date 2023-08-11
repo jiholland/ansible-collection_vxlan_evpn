@@ -12,19 +12,29 @@ Role Variables
 --------------
 
 defaults/main.yml:
-- vpc_domain
-- vpc_priority
-- vpc_keepalive_ip_dest
-- vpc_keepalive_ip_src
-- vpc_keepalive_if
-- vpc_keepalive_vrf
-- vpc_peerlink_lag_name
-- vpc_peerlink_lag_members
 - vpc_delay_restore
 - vpc_svi_delay_restore
 - vpc_native_vlan_id
 - vpc_native_vlan_name
 
+Example - hostvars:
+```YAML
+vpc_domain: 1
+vpc_priority: 1
+
+vpc_keepalive_ip_dest: 10.16.5.1
+vpc_keepalive_ip_src: 10.16.5.2
+vpc_keepalive_if: Ethernet1/3
+vpc_keepalive_vrf: vpc-keepalive-link
+
+vpc_peerlink_lag_name: port-channel1
+vpc_peerlink_lag_members:
+  - Ethernet1/1
+  - Ethernet1/2
+
+vpc_nve_ip: 10.16.4.1
+vpc_nve_vlan: 777
+```
 Dependencies
 ------------
 
@@ -40,7 +50,7 @@ Example Playbook
 
   roles:
     - role: jiholland.vxlan_evpn.vpc
-      when: hostvars[inventory_hostname]['vpc_domain'] is defined
+      when: vpc_domain is defined
 ```
 License
 -------

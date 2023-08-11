@@ -1,8 +1,8 @@
-{% for overlay_item in overlay_bgp_neighbors %}
 as_number: "{{ overlay_bgp_asn }}"
 router_id: "{{ overlay_rid_ip }}"
 log_neighbor_changes: true
 neighbors:
+{% for overlay_item in overlay_bgp_neighbors %}
   - neighbor_address: "{{ overlay_item['ip'] }}"
     remote_as: "{{ overlay_bgp_asn }}"
     description: "{{ overlay_item['name'] }}"

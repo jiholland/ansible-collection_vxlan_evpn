@@ -1,7 +1,6 @@
 ---
 galaxy_info:
   role_name: vpc
-  standalone: true
   author: Jørn Ivar Holland
   description: Configure a pair of Cisco Nexus devices in virtual Port Channel (vPC).
   license: BSD-3-Clause

@@ -6,10 +6,44 @@ dci_ospf_process_id: UNDERLAY
 
 dci_mtu: 9216
 
-dci_bgp_asn: "{{ bgp_asn }}"
+dci_bgp_asn: 65001
 
-dci_rid_if: "{{ rid_if }}"
-dci_rid_ip: "{{ rid_ip }}"
-dci_rid_tag: "{{ rid_tag }}"
+dci_rid_if: loopback0
+dci_rid_ip: 10.250.250.38
+dci_rid_tag: 54321
 
-dci_fabric_interfaces: "{{ fabric_interfaces }}"
+dci_fabric_interfaces:
+  - name: Ethernet1/7
+  - name: Ethernet1/8
+
+dci_route_map: RMAP-REDIST-DIRECT
+
+dci_delay_restore: 300
+
+dci_interfaces:
+  - name: Ethernet1/5
+    ip: 10.16.3.0
+    mask: 31
+  - name: Ethernet1/6
+    ip: 10.16.3.2
+    mask: 31
+
+dci_bgp_neighbors:  # Underlay.
+  - name: BGW-3
+    ip: 10.16.3.1
+    asn: 65002
+    source: Ethernet1/5
+  - name: BGW-4
+    ip: 10.16.3.3
+    asn: 65002
+    source: Ethernet1/6
+
+dci_ebgp_neighbors:  # Overlay.
+  - name: BGW-3
+    ip: 10.250.250.41
+    asn: 65002
+  - name: BGW-4
+    ip: 10.250.250.42
+    asn: 65002
+
+dci_macsec_key: abc3000000000000000000000000000000000000000000000000000000000000  # Change and encrypt with Ansible vault

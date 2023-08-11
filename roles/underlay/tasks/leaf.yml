@@ -16,7 +16,7 @@
 - name: leaf | Create L3 RID and VTEP loopbacks. Enable and set physical fabric interfaces in L3 mode. Ensure jumbo MTU.
   cisco.nxos.nxos_interfaces:
     config: "{{ lookup('ansible.builtin.template', 'interfaces.j2') | ansible.builtin.from_yaml }}"
-    state: merge
+    state: merged
   notify: Save nxos.
 
 - name: leaf | Assign IP address and tag to L3 RID and VTEP loopback fabric interfaces.
@@ -54,17 +54,16 @@
     state: present
   notify: Save nxos.
 
-- name: leaf | Ensure PIM sparse mode is running on L3 RID loopback interface.
+- name: leaf | Ensure PIM sparse mode is running on L3 RID and VTEP loopback interface.
   cisco.nxos.nxos_pim_interface:
-    interface: "{{ underlay_rid_if }}"
+    interface: "{{ underlay_item }}"
     sparse: true
     state: present
-  notify: Save nxos.
-
-- name: leaf | Ensure PIM sparse mode is running on L3 VTEP loopback interface.
-  cisco.nxos.nxos_pim_interface:
-    interface: "{{ underlay_vtep_if }}"
-    sparse: true
+  loop:
+    - "{{ underlay_rid_if }}"
+    - "{{ underlay_vtep_if }}"
+  loop_control:
+    loop_var: underlay_item
   notify: Save nxos.
 
 - name: leaf | Ensure PIM sparse mode is running on L3 fabric interfaces.
@@ -72,7 +71,7 @@
     interface: "{{ underlay_item['name'] }}"
     sparse: true
     state: present
-  loop: "{{ underlay_interfaces }}"
+  loop: "{{ underlay_fabric_interfaces }}"
   loop_control:
     loop_var: underlay_item
     label: "{{ underlay_item['name'] }}"
@@ -86,13 +85,13 @@
     - name: leaf | Define a non-VXLAN enabled VLAN as backup routed path.
       cisco.nxos.nxos_config:
         lines:
-          - system nve infra-vlans {{ vpc_nve_vlan }}
+          - system nve infra-vlans {{ underlay_vpc_nve_vlan }}
       notify: Save nxos.
 
     - name: leaf | Create VLAN for NVE-infra.
       cisco.nxos.nxos_vlans:
         config:
-          - vlan_id: "{{ vpc_nve_vlan }}"
+          - vlan_id: "{{ underlay_vpc_nve_vlan }}"
             name: BACKUP_VLAN_ROUTING_NVE_INFRA
         state: merged
       notify: Save nxos.
@@ -100,7 +99,7 @@
     - name: leaf | Create SVI for NVE-infra. Ensure jumbo MTU. Ensure interface description.
       cisco.nxos.nxos_interfaces:
         config:
-          - name: "Vlan{{ vpc_nve_vlan }}"
+          - name: "Vlan{{ underlay_vpc_nve_vlan }}"
             description: BACKUP VLAN ROUTING NVE-INFRA
             mtu: "{{ underlay_mtu }}"
             enabled: true
@@ -110,9 +109,9 @@
     - name: leaf | Set IP address on SVI for NVE-infra.
       cisco.nxos.nxos_l3_interfaces:
         config:
-          - name: Vlan{{ vpc_nve_vlan }}
+          - name: Vlan{{ underlay_vpc_nve_vlan }}
             ipv4:
-              - address: "{{ vpc_nve_ip }}/24"
+              - address: "{{ underlay_vpc_nve_ip }}/24"
             redirects: false
         state: merged
       notify: Save nxos.
@@ -120,7 +119,7 @@
     - name: leaf | Associate NVE-infra interface with OSFP process.
       cisco.nxos.nxos_ospf_interfaces:
         config:
-          - name: "Vlan{{ vpc_nve_vlan }}"
+          - name: "Vlan{{ underlay_vpc_nve_vlan }}"
             address_family:
               - afi: ipv4
                 network: point-to-point
@@ -133,7 +132,7 @@
 
     - name: leaf | Ensure PIM sparse mode is running on NVE-infra interface.
       cisco.nxos.nxos_pim_interface:
-        interface: Vlan{{ vpc_nve_vlan }}
+        interface: Vlan{{ underlay_vpc_nve_vlan }}
         sparse: true
         state: present
       notify: Save nxos.

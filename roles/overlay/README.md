@@ -1,14 +1,14 @@
 🏭 jiholland.overlay
-====================
+=====================
 
-Configure overlay for multisite VXLAN-EVPN fabric on Cisco Nexus platform.
+Configure overlay for multisite VXLAN-EVPN fabric on Cisco Nexus platform:
 - iBGP EVPN control plane.
 - Multicast-replication (BUM).
 ```YAML
                          BGP ASN 65001
         +--------------------+   +--------------------+
         |      SPINE-1       |   |      SPINE-2       |
-        | RID: 10.250.250.30 |   | RID: 10.250.250.31 |
+        | RID 10.250.250.30  |   | RID 10.250.250.31  |
         +--------------------+   +--------------------+
                    | |                      | |
            +-+-----+-+----------------------+ |
@@ -16,8 +16,8 @@ Configure overlay for multisite VXLAN-EVPN fabric on Cisco Nexus platform.
            | |                                     | |
 +--------------------+                             | |
 |       LEAF-1       |                  +--------------------+
-| RID: 10.250.250.32 |                  |       LEAF-2       |
-+--------------------+                  | RID: 10.250.250.33 |
+| RID 10.250.250.32  |                  |       LEAF-2       |
++--------------------+                  | RID 10.250.250.33  |
 + - - - - - - - - - -                   +--------------------+
          VTEP        |                  + - - - - - - - - - -
 |     Loopback1                                  VTEP        |
@@ -26,8 +26,8 @@ Configure overlay for multisite VXLAN-EVPN fabric on Cisco Nexus platform.
  - - - - - - - - - - +                  + - - - - - - - - - -
 + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                  Distributed Anycast Gateway                 |
-|                    GW IP: 172.16.100.1
-                    GW MAC: 2020.DEAD.BEEF                   |
+|                    GW IP 172.16.100.1
+                    GW MAC 2020.DEAD.BEEF                    |
 + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ```
 Requirements
@@ -49,42 +49,6 @@ defaults/main.yml:
 - overlay_anycast_gw_mac
 - overlay_global_mcast_group_l2
 
-Example - hostvars/SPINE-1.yml:
-```YAML
----
-# Hostvars for spine
-
-network_role: spine
-
-rid_if: loopback0
-rid_ip: 10.250.250.30
-
-bgp_asn: 65001
-bgp_neighbors:
-  - name: LEAF-1
-    ip: 10.250.250.32
-  - name: LEAF-2
-    ip: 10.250.250.33
-```
-Example - hostvars/LEAF-1.yml:
-```YAML
----
-# Hostvars for leaf
-
-network_role: leaf
-
-rid_if: loopback0
-rid_ip: 10.250.250.30
-
-vtep_if: loopback1
-
-bgp_asn: 65001
-bgp_neighbors:
-  - name: SPINE-1
-    ip: 10.250.250.30
-  - name: SPINE-2
-    ip: 10.250.250.31
-```
 Example Playbook
 ----------------
 ```YAML
@@ -94,14 +58,19 @@ Example Playbook
   gather_facts: false
 
   roles:
-
     - role: jiholland.vxlan_evpn.vpc
-      when: vpc_domain is defined
+      tags: vpc
+      when: hostvars[inventory_hostname]['vpc_domain'] is defined
     - role: jiholland.vxlan_evpn.underlay
+      tags: underlay
     - role: jiholland.vxlan_evpn.overlay
+      tags: overlay
     - role: jiholland.vxlan_evpn.dci
+      tags: dci
     - role: jiholland.vxlan_evpn.host_segments
+      tags: host_segments
     - role: jiholland.vxlan_evpn.verify
+      tags: verify
 ```
 License
 -------

@@ -2,17 +2,11 @@
 # tasks file for overlay
 
 - name: Include role specific tasks.
-  tags: fabric_overlay
   ansible.builtin.include_tasks:
     file: leaf.yml
-    apply:
-      tags: fabric_overlay
   when: network_role is ansible.builtin.search('leaf')
 
 - name: Include role specific tasks.
-  tags: fabric_overlay
   ansible.builtin.include_tasks:
     file: spine.yml
-    apply:
-      tags: fabric_overlay
   when: network_role is eq('spine')

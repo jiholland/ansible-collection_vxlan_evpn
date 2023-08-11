@@ -23,7 +23,7 @@
           area:
             area_id: {{ underlay_ospf_area_id }}
 {% endif %}
-{% for underlay_item in underlay_interfaces %}
+{% for underlay_item in underlay_fabric_interfaces %}
 - name: {{ underlay_item['name'] }}
   address_family:
     - afi: ipv4

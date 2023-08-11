@@ -25,7 +25,7 @@
 
 - name: leaf | Configure L2VPN EVPN for BGP neighbors. Set address-family to EVPN.
   cisco.nxos.nxos_bgp_neighbor_address_family:
-    config: "{{ lookup('ansible.builtin.template', 'bgp_neighbors.j2') | ansible.builtin.from_yaml }}"
+    config: "{{ lookup('ansible.builtin.template', 'bgp_neighbor_address_family.j2') | ansible.builtin.from_yaml }}"
     state: merged
   notify: Save nxos.
 
