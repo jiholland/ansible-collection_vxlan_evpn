@@ -2,5 +2,5 @@
 - name: {{ dci_item['name'] }}
   ipv4:
     - address: {{ dci_item['ip'] }}/{{ dci_item['mask'] }}
-      tag: {{ dci_tag }}
+        tag: {{ dci_rid_tag }}
 {% endfor %}

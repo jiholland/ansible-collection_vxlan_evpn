@@ -40,8 +40,8 @@ Configure host segments for multisite VXLAN-EVPN fabric on Cisco Nexus platform.
 |   VNI 10100   |                           |   VNI 10101   |
 +---------------+                           +---------------+
 ```
-**Broadcast, Unknown Unicast, Multicast:**
-- Note: BUM between sites (dci) are always ingress-replicated (unicast).
+**Broadcast, Unknown Unicast, Multicast**<br>
+Note: BUM between sites (dci) are always ingress-replicated (unicast).
 ```YAML
                      + - - - - - - -
                       PIM Anycast RP|
@@ -82,6 +82,12 @@ Role Variables
 --------------
 
 defaults/main.yml:
+- host_segments_mtu
+- host_segments_rmap_host_svi_name
+- host_segments_rmap_host_svi_tag
+- host_segments_l2
+- host_segments_l3
+- host_segments_vrf
 
 Example - hostvars/LEAF-1.yml:
 ```YAML
@@ -101,12 +107,18 @@ Example Playbook
 
   roles:
     - role: jiholland.vxlan_evpn.vpc
-      when: vpc_domain is defined
+      tags: vpc
+      when: hostvars[inventory_hostname]['vpc_domain'] is defined
     - role: jiholland.vxlan_evpn.underlay
+      tags: underlay
     - role: jiholland.vxlan_evpn.overlay
+      tags: overlay
     - role: jiholland.vxlan_evpn.dci
+      tags: dci
     - role: jiholland.vxlan_evpn.host_segments
+      tags: host_segments
     - role: jiholland.vxlan_evpn.verify
+      tags: verify
 ```
 License
 -------

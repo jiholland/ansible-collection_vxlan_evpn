@@ -59,18 +59,11 @@
     peer_gw: true
     auto_recovery: true
     delay_restore: "{{ vpc_delay_restore }}"
+    delay_restore_interface_vlan: "{{ vpc_svi_delay_restore }}"
     state: present
   notify: Save nxos.
 
-- name: Ensure vPC domain has peer-switch feature to optimize the STP behavior.
-  cisco.nxos.nxos_config:
-    lines:
-      - peer-switch
-    parents:
-      - vpc domain {{ vpc_domain }}
-  notify: Save nxos.
-
-- name: Ensure vPC domain has IP ARP synchronize feature enabled.
+- name: Ensure vPC domain has peer-switch feature and IP ARP synchronize feature enabled.
   cisco.nxos.nxos_config:
     lines:
       - ip arp synchronize
@@ -81,18 +74,8 @@
 
 - name: Set interface description and L2 mode on vPC peer link interfaces and enable interfaces.
   cisco.nxos.nxos_interfaces:
-    config:
-      - name: "{{ vpc_peerlink_lag_name }}"
-        description: VPC PEER LINK
-        mode: layer2
-        enabled: true
-      - name: "{{ vpc_item }}"
-        mode: layer2
-        enabled: true
+    config: "{{ lookup('ansible.builtin.template', 'interfaces.j2') | ansible.builtin.from_yaml }}"
     state: merged
-  loop: "{{ vpc_peerlink_lag_members }}"
-  loop_control:
-    loop_var: vpc_item
   notify: Save nxos.
 
 - name: Create native VLAN for vPC peer link interfaces.
@@ -103,6 +86,12 @@
     state: merged
   notify: Save nxos.
 
+- name: Configure Port-Channel for vPC peer link in mode active and add members to it.
+  cisco.nxos.nxos_lag_interfaces:
+    config: "{{ lookup('ansible.builtin.template', 'lag_interfaces.j2') | ansible.builtin.from_yaml }}"
+    state: merged
+  notify: Save nxos.
+
 - name: Set vPC peer link interfaces to trunk. Ensure native VLAN.
   cisco.nxos.nxos_l2_interfaces:
     config:
@@ -110,27 +99,7 @@
         mode: trunk
         trunk:
           native_vlan: "{{ vpc_native_vlan_id }}"
-      - name: "{{ vpc_item }}"
-        mode: trunk
-        trunk:
-          native_vlan: "{{ vpc_native_vlan_id }}"
     state: merged
-  loop: "{{ vpc_peerlink_lag_members }}"
-  loop_control:
-    loop_var: vpc_item
-  notify: Save nxos.
-
-- name: Configure Port-Channel for vPC peer link in mode active and add members to it.
-  cisco.nxos.nxos_lag_interfaces:
-    config:
-      - name: "{{ vpc_peerlink_lag_name }}"
-        members:
-          - member: "{{ vpc_item }}"
-            mode: active
-    state: merged
-  loop: "{{ vpc_peerlink_lag_members }}"
-  loop_control:
-    loop_var: vpc_item
   notify: Save nxos.
 
 - name: Configure Port-Channel as vPC peer link.
@@ -151,23 +120,9 @@
       when: not ansible_check_mode
       notify: Save nxos.
 
-    - name: Set STP port type to network for vPC peer link Port-Channel.
+    - name: Set STP port type to network.
       cisco.nxos.nxos_config:
-        lines:
-          - spanning-tree port type network
-        parents:
-          - interface {{ vpc_peerlink_lag_name }}
-      notify: Save nxos.
-
-    - name: Set STP port type to network for vPC peer link ethernet interfaces.
-      cisco.nxos.nxos_config:
-        lines:
-          - spanning-tree port type network
-        parents:
-          - interface {{ vpc_item }}
-      loop: "{{ vpc_peerlink_lag_members }}"
-      loop_control:
-        loop_var: vpc_item
+        src: stp_interfaces.j2
       notify: Save nxos.
 
 
@@ -177,12 +132,4 @@
       - spanning-tree vlan 1-3967 hello-time 4
       - spanning-tree vlan 1-3967 forward-time 30
       - spanning-tree vlan 1-3967 max-age 40
-  notify: Save nxos.
-
-- name: Set delay restore for VLAN SVI.
-  cisco.nxos.nxos_config:
-    lines:
-      - delay restore interface-vlan {{ vpc_svi_delay_restore }}
-    parents:
-      - vpc domain {{ vpc_domain }}
   notify: Save nxos.

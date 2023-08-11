@@ -5,7 +5,7 @@
   cisco.nxos.nxos_interfaces:
     config:
       - name: "{{ dci_if }}"
-        description: MULTISITE INTERFACE (VIP VTEP)
+        description: MULTISITE DCI INTERFACE
         enabled: true
     state: merged
   notify: Save nxos.
@@ -47,14 +47,14 @@
 
 - name: underlay | Set address-family to IPv4-unicast for border-leaf neighbors under BGP process.
   cisco.nxos.nxos_bgp_neighbor_address_family:
-    config: "{{ lookup('ansible.builtin.template', 'underlay_bgp_neighbors.j2') | ansible.builtin.from_yaml }}"
+    config: "{{ lookup('ansible.builtin.template', 'underlay_bgp_neighbor_address_family.j2') | ansible.builtin.from_yaml }}"
     state: merged
   notify: Save nxos.
 
 - name: underlay | Create route-map for redistribution of directly connected routes.
   cisco.nxos.nxos_route_maps:
     config:
-      - route_map: RMAP-REDIST-DIRECT
+      - route_map: "{{ dci_route_map }}"
         entries:
           - sequence: 10
             action: permit
@@ -74,6 +74,6 @@
             parallel_paths: 4
           redistribute:
             - protocol: direct
-              route_map: RMAP-REDIST-DIRECT
+              route_map: "{{ dci_route_map }}"
     state: merged
   notify: Save nxos.

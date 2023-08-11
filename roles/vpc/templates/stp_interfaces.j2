@@ -1,0 +1,6 @@
+interface {{ vpc_peerlink_lag_name }}
+  spanning-tree port type network
+{% for vpc_item in vpc_peerlink_lag_members %}
+interface {{ vpc_item }}
+  spanning-tree port type network
+{% endfor %}

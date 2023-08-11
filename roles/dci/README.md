@@ -1,7 +1,7 @@
 🏭 jiholland.dci
 ================
 
-Configure DCI for multisite VXLAN-EVPN fabric on Cisco Nexus platform.
+Configure DCI for multisite VXLAN-EVPN fabric on Cisco Nexus platform:
 - Border-leafs in vPC.
 - eBGP in DCI underlay and overlay.
 - Ingress-replication (BUM).
@@ -24,56 +24,13 @@ defaults/main.yml:
 - dci_rid_ip
 - dci_rid_tag
 - dci_fabric_interfaces
+- dci_route_map
+- dci_delay_restore
+- dci_interfaces
+- dci_bgp_neighbors
+- dci_ebgp_neighbors
+- dci_macsec_key
 
-Example - hostvars/bgw-1.yml:
-```YAML
----
-# Hostvars for border-leaf
-
-network_role: border-leaf
-
-bgp_asn: 65001
-
-rid_if: loopback0
-rid_ip: 10.250.250.38
-rid_tag: 54321
-
-dci_if: loopback100
-dci_ip: 10.10.2.1
-dci_tag: 54321
-
-dci_interfaces:
-  - name: Ethernet1/5
-    ip: 10.16.3.0
-    mask: 31
-  - name: Ethernet1/6
-    ip: 10.16.3.2
-    mask: 31
-
-dci_bgp_neighbors:  # Underlay.
-  - name: BGW-3
-    ip: 10.16.3.1
-    asn: 65002
-    source: Ethernet1/5
-  - name: BGW-4
-    ip: 10.16.3.3
-    asn: 65002
-    source: Ethernet1/6
-
-dci_ebgp_neighbors:  # Overlay.
-  - name: BGW-3
-    ip: 10.250.250.41
-    asn: 65002
-  - name: BGW-4
-    ip: 10.250.250.42
-    asn: 65002
-
-dci_macsec_key: abc3000000000000000000000000000000000000000000000000000000000000  # Change and encrypt with Ansible vault
-
-fabric_interfaces:
-  - name: Ethernet1/7
-  - name: Ethernet1/8
-```
 Example Playbook
 ----------------
 ```YAML
@@ -84,12 +41,18 @@ Example Playbook
 
   roles:
     - role: jiholland.vxlan_evpn.vpc
-      when: vpc_domain is defined
+      tags: vpc
+      when: hostvars[inventory_hostname]['vpc_domain'] is defined
     - role: jiholland.vxlan_evpn.underlay
+      tags: underlay
     - role: jiholland.vxlan_evpn.overlay
+      tags: overlay
     - role: jiholland.vxlan_evpn.dci
+      tags: dci
     - role: jiholland.vxlan_evpn.host_segments
+      tags: host_segments
     - role: jiholland.vxlan_evpn.verify
+      tags: verify
 ```
 License
 -------

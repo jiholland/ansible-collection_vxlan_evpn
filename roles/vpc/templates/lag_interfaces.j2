@@ -1,0 +1,6 @@
+{% for vpc_item in vpc_peerlink_lag_members %}
+- name: "{{ vpc_peerlink_lag_name }}"
+  members:
+    - member: "{{ vpc_item }}"
+      mode: active
+{% endfor %}

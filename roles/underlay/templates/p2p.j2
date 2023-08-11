@@ -1,5 +1,5 @@
-{% for underlay_item in underlay_interfaces %}
-interface {{ underlay_item }}
+{% for underlay_item in underlay_fabric_interfaces %}
+interface {{ underlay_item['name'] }}
  medium p2p
  ip unnumbered {{ underlay_rid_if }}
 {% endfor %}

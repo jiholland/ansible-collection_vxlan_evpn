@@ -1,7 +1,7 @@
 🏭 jiholland.underlay
 =====================
 
-Configure underlay for multisite VXLAN-EVPN fabric on Cisco Nexus platform.
+Configure underlay for multisite VXLAN-EVPN fabric on Cisco Nexus platform:
 - OSPF routing.
 - P2P L3 links.
 - PIM Sparse with Anycast RP.
@@ -12,7 +12,7 @@ Configure underlay for multisite VXLAN-EVPN fabric on Cisco Nexus platform.
        + - - - - - - - - - - - - - - - - - - - - - - -
        +--------------------+    +--------------------+
        |      SPINE-1       |    |      SPINE-2       |
-       | RID: 10.250.250.30 |    | RID: 10.250.250.31 |
+       | RID 10.250.250.30  |    | RID 10.250.250.31  |
        +--------------------+    +--------------------+
                 | |                       | |
            +-+--+-+-----------------------+ |
@@ -20,8 +20,8 @@ Configure underlay for multisite VXLAN-EVPN fabric on Cisco Nexus platform.
            | |                                    | |
 +--------------------+                            | |
 |       LEAF-1       |                 +------------+-------+
-| RID: 10.250.250.32 |                 |       LEAF-2       |
-+--------------------+                 | RID: 10.250.250.33 |
+| RID 10.250.250.32  |                 |       LEAF-2       |
++--------------------+                 | RID 10.250.250.33  |
                                        +--------------------+
 ```
 Requirements
@@ -32,51 +32,28 @@ Requirements
 Role Variables
 --------------
 
-Example - hostvars/SPINE-1.yml:
-```YAML
----
-# Hostvars for spine
+defaults/main.yml:
+- underlay_fabric_interfaces
+- underlay_mtu
+- underlay_rid_if
+- underlay_rid_ip
+- underlay_rid_mask
+- underlay_rid_tag
+- underlay_vtep_if
+- underlay_vtep_ip
+- underlay_vtep_secondary_ip
+- underlay_vtep_mask
+- underlay_vtep_tag
+- underlay_pim_if
+- underlay_pim_mask
+- underlay_pim_ip_remote
+- underlay_pim_group_range
+- underlay_ospf_area_id
+- underlay_ospf_process_id
+- underlay_vpc_domain
+- underlay_vpc_nve_vlan
+- underlay_vpc_nve_ip
 
-network_role: spine
-
-rid_if: loopback0
-rid_ip: 10.250.250.30
-rid_mask: 32
-
-pim_desc: PIM ANYCAST RP
-pim_if: loopback254
-pim_ip: 10.254.254.30  # Anycast RP address.
-pim_mask: 32
-pim_local_ip: 10.254.254.1
-pim_remote_ip: 10.254.254.2
-
-fabric_interfaces:
- - name: Ethernet1/1
- - name: Ethernet1/2
- - name: Ethernet1/3
- - name: Ethernet1/4
-```
-Example - hostvars/LEAF-1.yml:
-```YAML
----
-# Hostvars for leaf
-
-network_role: leaf
-
-rid_if: loopback0
-rid_ip: 10.250.250.32
-rid_mask: 32
-rid_tag: 54321
-
-vtep_if: loopback1
-vtep_ip: 10.254.250.32
-vtep_mask: 32
-vtep_tag: 54321
-
-fabric_interfaces:
- - name: Ethernet1/51
- - name: Ethernet1/52
-```
 Example Playbook
 ----------------
 ```YAML
@@ -87,12 +64,18 @@ Example Playbook
 
   roles:
     - role: jiholland.vxlan_evpn.vpc
-      when: vpc_domain is defined
+      tags: vpc
+      when: hostvars[inventory_hostname]['vpc_domain'] is defined
     - role: jiholland.vxlan_evpn.underlay
+      tags: underlay
     - role: jiholland.vxlan_evpn.overlay
+      tags: overlay
     - role: jiholland.vxlan_evpn.dci
+      tags: dci
     - role: jiholland.vxlan_evpn.host_segments
+      tags: host_segments
     - role: jiholland.vxlan_evpn.verify
+      tags: verify
 ```
 License
 -------

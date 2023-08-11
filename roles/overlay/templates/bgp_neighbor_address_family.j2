@@ -1,6 +1,6 @@
-{% for overlay_item in overlay_bgp_neighbors %}
 as_number: "{{ overlay_bgp_asn }}"
 neighbors:
+{% for overlay_item in overlay_bgp_neighbors %}
   - neighbor_address: "{{ overlay_item['ip'] }}"
     address_family:
       - afi: l2vpn

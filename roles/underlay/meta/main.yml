@@ -1,11 +1,10 @@
 ---
 galaxy_info:
   role_name: underlay
-  standalone: true
   author: Jørn Ivar Holland
   description: Configure underlay network for VXLAN with EVPN controller in multisite clos-network.
   license: BSD-3-Clause
-  min_ansible_version: '2.9'
+  min_ansible_version: '2.11'
   platforms:
     - name: NXOS
       versions:

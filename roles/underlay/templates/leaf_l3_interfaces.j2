@@ -6,7 +6,7 @@
   ipv4:
     - address: {{ underlay_vtep_ip }}/{{ underlay_vtep_mask }}
       tag: {{ underlay_vtep_tag }}
-{% if vpc is defined %}
+{% if vpc_domain is defined %}
     - address: {{ underlay_vtep_secondary_ip }}/{{ underlay_vtep_mask }}
       secondary: true
       tag: {{ underlay_vtep_tag }}

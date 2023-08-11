@@ -1,26 +1,32 @@
 ---
 # defaults file for underlay
 
-underlay_interfaces: "{{ fabric_interfaces }}"
+underlay_fabric_interfaces:
+  - name: Ethernet1/51
+  - name: Ethernet1/52
 
 underlay_mtu: 9216
 
-underlay_rid_if: "{{ rid_if }}"
-underlay_rid_ip: "{{ rid_ip }}"
+underlay_rid_if: loopback0
+underlay_rid_ip: 10.250.250.30
 underlay_rid_mask: 32
+underlay_rid_tag: 54321
 
-underlay_vtep_if: "{{ vtep_if }}"
-underlay_vtep_ip: "{{ vtep_ip }}"
-underlay_vtep_secondary_ip: "{{ vtep_secondary_ip }}"
+underlay_vtep_if: loopback1
+underlay_vtep_ip: 10.250.250.31
+underlay_vtep_secondary_ip: 10.250.250.33
 underlay_vtep_mask: 32
+underlay_vtep_tag: 54321
 
-underlay_pim_desc: "{{ pim_desc }}"
-underlay_pim_if: "{{ pim_if }}"
-underlay_pim_ip: "{{ pim_ip }}"  # Anycast RP address.
+underlay_pim_if: loopback254
+underlay_pim_ip: 172.16.0.254  # Anycast RP address.
 underlay_pim_mask: 32
-underlay_pim_local_ip: "{{ pim_local_ip }}"
-underlay_pim_remote_ip: "{{ pim_remote_ip }}"
 underlay_pim_group_range: 239.239.0.0/16
+underlay_pim_ip_remote: 10.250.250.29
 
 underlay_ospf_area_id: 0.0.0.0
 underlay_ospf_process_id: UNDERLAY
+
+underlay_vpc_domain: 1
+underlay_vpc_nve_vlan: 77
+underlay_vpc_nve_ip: 10.77.77.1

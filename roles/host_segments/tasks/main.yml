@@ -8,6 +8,7 @@
     - name: Configure tenant VRFs.
       cisco.nxos.nxos_config:
         src: host_vrfs.j2
+      when: host_vrfs is not eq(None)
       notify: Save nxos.
       vars:
         ansible_command_timeout: 1200
@@ -15,6 +16,7 @@
     - name: Configure host segments with distributed anycast gateway.
       cisco.nxos.nxos_config:
         src: host_segments_l3.j2
+      when: host_segments_l3 is not eq(None)
       notify: Save nxos.
       vars:
         ansible_command_timeout: 1200
@@ -22,6 +24,7 @@
     - name: Configure host segments without distributed anycast gateway.
       cisco.nxos.nxos_config:
         src: host_segments_l2.j2
+      when: host_segments_l2 is not eq(None)
       notify: Save nxos.
       vars:
         ansible_command_timeout: 1200
