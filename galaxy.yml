@@ -1,7 +1,7 @@
 ---
 namespace: jiholland
 name: vxlan_evpn
-version: 24.1.0
+version: 23.0.0
 readme: README.md
 
 authors:
@@ -16,7 +16,7 @@ tags:
   - networking
 
 dependencies:
-  cisco.nxos: ">=4.0.1"
+  cisco.nxos: ">=5.2.1"
 
 repository: https://github.com/jiholland/ansible-collection_vxlan_evpn
 documentation: https://github.com/jiholland/ansible-collection_vxlan_evpn
