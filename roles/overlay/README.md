@@ -38,7 +38,6 @@ Requirements
 Role Variables
 --------------
 
-defaults/main.yml:
 - overlay_rid_if
 - overlay_rid_ip
 - overlay_vtep_if

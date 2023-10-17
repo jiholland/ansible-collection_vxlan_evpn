@@ -15,7 +15,6 @@ Requirements
 Role Variables
 --------------
 
-defaults/main.yml:
 - dci_ospf_area_id
 - dci_ospf_process_id
 - dci_mtu

@@ -11,7 +11,6 @@ Requirements
 Role Variables
 --------------
 
-defaults/main.yml:
 - vpc_domain
 - vpc_priority
 - vpc_keepalive_ip_dest

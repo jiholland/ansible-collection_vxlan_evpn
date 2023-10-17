@@ -2,3 +2,10 @@ ancestor: null
 releases:
   23.0.0:
     release_date: '2023-10-16'
+  23.0.1:
+    changes:
+      minor_changes:
+      - Fixed typoes in readme
+    fragments:
+    - fix.yml
+    release_date: '2023-10-17'
