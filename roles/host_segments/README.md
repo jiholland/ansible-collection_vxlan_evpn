@@ -81,7 +81,6 @@ Requirements
 Role Variables
 --------------
 
-defaults/main.yml:
 - host_segments_mtu
 - host_segments_rmap_host_svi_name
 - host_segments_rmap_host_svi_tag

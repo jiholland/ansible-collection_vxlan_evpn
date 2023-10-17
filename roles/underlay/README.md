@@ -32,7 +32,6 @@ Requirements
 Role Variables
 --------------
 
-defaults/main.yml:
 - underlay_fabric_interfaces
 - underlay_mtu
 - underlay_rid_if
