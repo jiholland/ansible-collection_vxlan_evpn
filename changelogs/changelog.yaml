@@ -9,3 +9,10 @@ releases:
     fragments:
     - fix.yml
     release_date: '2023-10-17'
+  23.0.2:
+    changes:
+      minor_changes:
+      - galaxy - added more tags.
+    fragments:
+    - galaxy.yml
+    release_date: '2023-10-19'
