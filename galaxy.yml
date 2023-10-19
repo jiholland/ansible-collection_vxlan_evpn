@@ -1,7 +1,7 @@
 ---
 namespace: jiholland
 name: vxlan_evpn
-version: 23.0.1
+version: 23.0.2
 readme: README.md
 
 authors:
@@ -13,14 +13,20 @@ license:
   - BSD-3-Clause
 
 tags:
+  - bgp
+  - cisco
+  - evpn
   - networking
+  - nexus
+  - ospf
+  - pim
+  - vpc
+  - vxlan
 
 dependencies:
   cisco.nxos: ">=5.2.1"
 
 repository: https://github.com/jiholland/ansible-collection_vxlan_evpn
-documentation: https://github.com/jiholland/ansible-collection_vxlan_evpn
-homepage: https://github.com/jiholland
 issues: https://github.com/jiholland/ansible-collection_vxlan_evpn/issues
 
 build_ignore: []
