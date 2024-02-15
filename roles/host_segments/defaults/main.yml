@@ -2,7 +2,7 @@
 # defaults file for host_segments
 
 # The network role as defined in inventory host_vars.
-# Options are: spine, leaf or boarder-leaf
+# Options are: spine, leaf or border-leaf
 host_segments_network_role: "{{ network_role }}"
 
 host_segments_rmap_host_svi_name: HOST-SVI
