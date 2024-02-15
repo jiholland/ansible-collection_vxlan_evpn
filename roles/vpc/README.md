@@ -6,7 +6,7 @@ Configure a pair of Cisco Nexus devices in virtual Port Channel (vPC).
 Requirements
 ------------
 
-💿 [Cisco NXOS Collection](https://galaxy.ansible.com/cisco/nxos)
+💿 [Cisco NXOS Collection](https://galaxy.ansible.com/ui/repo/published/cisco/nxos)
 
 Role Variables
 --------------
@@ -19,8 +19,6 @@ Role Variables
 - vpc_keepalive_vrf
 - vpc_peerlink_lag_name
 - vpc_peerlink_lag_members
-- vpc_delay_restore
-- vpc_svi_delay_restore
 - vpc_native_vlan_id
 - vpc_native_vlan_name
 
@@ -34,12 +32,12 @@ Example Playbook
 ```YAML
 ---
 - name: Configure a pair of Cisco Nexus devices in vPC.
-  hosts: "{{ target }}"
   gather_facts: false
+  hosts: "{{ target }}"
 
   roles:
     - role: jiholland.vxlan_evpn.vpc
-      when: hostvars[inventory_hostname]['vpc_domain'] is defined
+      when: vpc_domain is defined
 ```
 License
 -------

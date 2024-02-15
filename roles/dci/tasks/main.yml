@@ -2,7 +2,7 @@
 # tasks file for dci
 
 - name: Configure DCI.
-  when: network_role is eq('border-leaf')
+  when: dci_network_role is eq('border-leaf')
   block:
 
     - name: Configure DCI underlay.

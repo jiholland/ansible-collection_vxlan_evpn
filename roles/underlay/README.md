@@ -27,13 +27,13 @@ Configure underlay for multisite VXLAN-EVPN fabric on Cisco Nexus platform:
 Requirements
 ------------
 
-💿 [Cisco NXOS Collection](https://galaxy.ansible.com/cisco/nxos)
+💿 [Cisco NXOS Collection](https://galaxy.ansible.com/ui/repo/published/cisco/nxos)
 
 Role Variables
 --------------
 
+- underlay_network_role
 - underlay_fabric_interfaces
-- underlay_mtu
 - underlay_rid_if
 - underlay_rid_ip
 - underlay_rid_mask
@@ -47,8 +47,6 @@ Role Variables
 - underlay_pim_mask
 - underlay_pim_ip_remote
 - underlay_pim_group_range
-- underlay_ospf_area_id
-- underlay_ospf_process_id
 - underlay_vpc_domain
 - underlay_vpc_nve_vlan
 - underlay_vpc_nve_ip
@@ -58,13 +56,13 @@ Example Playbook
 ```YAML
 ---
 - name: Build VXLAN-EVPN fabric.
-  hosts: "{{ target }}"
   gather_facts: false
+  hosts: "{{ target }}"
 
   roles:
     - role: jiholland.vxlan_evpn.vpc
       tags: vpc
-      when: hostvars[inventory_hostname]['vpc_domain'] is defined
+      when: vpc_domain is defined
     - role: jiholland.vxlan_evpn.underlay
       tags: underlay
     - role: jiholland.vxlan_evpn.overlay

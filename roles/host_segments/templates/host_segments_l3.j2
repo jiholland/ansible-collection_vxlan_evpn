@@ -4,7 +4,7 @@ vlan {{ host_segments_item['vlan_id'] }}
   vn-segment {{ host_segments_item['vni_id'] }}
 interface Vlan{{ host_segments_item['vlan_id'] }}
   vrf member {{ host_segments_item['vrf'] }}
-  mtu {{ host_segments_mtu }}
+  mtu {{ __host_segments_mtu }}
   fabric forwarding mode anycast-gateway
   ip address {{ host_segments_item['vlan_svi_ip'] }} tag {{ host_segments_rmap_host_svi_tag }}
   no ip redirects
@@ -12,7 +12,7 @@ interface Vlan{{ host_segments_item['vlan_id'] }}
 interface nve1
   member vni {{ host_segments_item['vni_id'] }}
     suppress-arp
-{% if network_role is eq('border-leaf') %}
+{% if host_segments_network_role is eq('border-leaf') %}
     multisite ingress-replication
 {% endif %}
 evpn

@@ -1,0 +1,7 @@
+---
+# vars file for underlay
+
+__underlay_mtu: 9216
+
+__underlay_ospf_area_id: 0.0.0.0
+__underlay_ospf_process_id: UNDERLAY

@@ -10,7 +10,7 @@ vrf context {{ host_segments_item['vrf'] }}
 interface Vlan{{ host_segments_item['vlan_id'] }}
   description L3 VNI FOR {{ host_segments_item['vrf'] }}
   no shutdown
-  mtu {{ host_segments_mtu }}
+  mtu {{ __host_segments_mtu }}
   vrf member {{ host_segments_item['vrf'] }}
   no ip redirects
   ip forward

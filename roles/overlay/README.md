@@ -1,5 +1,5 @@
 🏭 jiholland.overlay
-=====================
+====================
 
 Configure overlay for multisite VXLAN-EVPN fabric on Cisco Nexus platform:
 - iBGP EVPN control plane.
@@ -33,11 +33,12 @@ Configure overlay for multisite VXLAN-EVPN fabric on Cisco Nexus platform:
 Requirements
 ------------
 
-💿 [Cisco NXOS Collection](https://galaxy.ansible.com/cisco/nxos)
+💿 [Cisco NXOS Collection](https://galaxy.ansible.com/ui/repo/published/cisco/nxos)
 
 Role Variables
 --------------
 
+- overlay_network_role
 - overlay_rid_if
 - overlay_rid_ip
 - overlay_vtep_if
@@ -53,13 +54,13 @@ Example Playbook
 ```YAML
 ---
 - name: Build VXLAN-EVPN fabric.
-  hosts: "{{ target }}"
   gather_facts: false
+  hosts: "{{ target }}"
 
   roles:
     - role: jiholland.vxlan_evpn.vpc
       tags: vpc
-      when: hostvars[inventory_hostname]['vpc_domain'] is defined
+      when: vpc_domain is defined
     - role: jiholland.vxlan_evpn.underlay
       tags: underlay
     - role: jiholland.vxlan_evpn.overlay
