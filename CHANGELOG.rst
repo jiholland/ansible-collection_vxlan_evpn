@@ -5,6 +5,14 @@ Jiholland.Vxlan_Evpn Release Notes
 .. contents:: Topics
 
 
+v24.2.1
+=======
+
+Minor Changes
+-------------
+
+- all roles - typo in comment
+
 v24.2.0
 =======
 

@@ -2,7 +2,7 @@
 # defaults file for underlay
 
 # The network role as defined in inventory host_vars.
-# Options are: spine, leaf or boarder-leaf
+# Options are: spine, leaf or border-leaf
 underlay_network_role: "{{ network_role }}"
 
 # underlay_fabric_interfaces:
