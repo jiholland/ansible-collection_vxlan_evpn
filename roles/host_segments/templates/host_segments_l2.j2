@@ -5,7 +5,7 @@ vlan {{ host_segments_item['vlan_id'] }}
 interface nve1
   member vni {{ host_segments_item['vni_id'] }}
     suppress-arp disable
-{% if network_role is eq('border-leaf') %}
+{% if host_segments_network_role is eq('border-leaf') %}
     multisite ingress-replication
 {% endif %}
 evpn

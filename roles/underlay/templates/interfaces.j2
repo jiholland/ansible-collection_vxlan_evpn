@@ -1,19 +1,19 @@
 - name: {{ underlay_rid_if }}
   description: RID AND OSPF-BGP-PEERING
   enabled: true
-{% if network_role is ansible.builtin.search('leaf') %}
+{% if underlay_network_role is ansible.builtin.search('leaf') %}
 - name: {{ underlay_vtep_if }}
   description: NVE INTERFACE
   enabled: true
 {% endif %}
-{% if network_role is eq('spine') %}
+{% if underlay_network_role is eq('spine') %}
 - name: {{ underlay_pim_if }}
   description: PIM ANYCAST RP
   enabled: true
 {% endif %}
 {% for underlay_item in underlay_fabric_interfaces %}
 - name: {{ underlay_item['name'] }}
-  mtu: {{ underlay_mtu }}
+  mtu: {{ __underlay_mtu }}
   mode: layer3
   enabled: true
 {% endfor %}

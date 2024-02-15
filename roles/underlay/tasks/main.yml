@@ -4,9 +4,9 @@
 - name: Include role specific tasks.
   ansible.builtin.include_tasks:
     file: leaf.yml
-  when: network_role is ansible.builtin.search('leaf')
+  when: underlay_network_role is ansible.builtin.search('leaf')
 
 - name: Include role specific tasks.
   ansible.builtin.include_tasks:
     file: spine.yml
-  when: network_role is eq('spine')
+  when: underlay_network_role is eq('spine')

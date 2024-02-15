@@ -6,20 +6,20 @@ Verify multisite VXLAN-EVPN fabric on Cisco Nexus platform.
 Requirements
 ------------
 
-💿 [Cisco NXOS Collection](https://galaxy.ansible.com/cisco/nxos)
+💿 [Cisco NXOS Collection](https://galaxy.ansible.com/ui/repo/published/cisco/nxos)
 
 Role Variables
 --------------
 
-None.
+- verify_network_role
 
 Example Playbook
 ----------------
 ```YAML
 ---
 - name: Build VXLAN-EVPN fabric.
-  hosts: "{{ target }}"
   gather_facts: false
+  hosts: "{{ target }}"
 
   roles:
     - role: jiholland.vxlan_evpn.vpc

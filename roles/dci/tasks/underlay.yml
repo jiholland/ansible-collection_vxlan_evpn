@@ -17,9 +17,9 @@
         address_family:
           - afi: ipv4
             processes:
-              - process_id: "{{ dci_ospf_process_id }}"
+              - process_id: "{{ __dci_ospf_process_id }}"
                 area:
-                  area_id: "{{ dci_ospf_area_id }}"
+                  area_id: "{{ __dci_ospf_area_id }}"
     state: merged
   notify: Save nxos.
 

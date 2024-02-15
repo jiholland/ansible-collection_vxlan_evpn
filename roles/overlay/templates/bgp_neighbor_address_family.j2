@@ -1,11 +1,11 @@
-as_number: "{{ overlay_bgp_asn }}"
+as_number: {{ overlay_bgp_asn }}
 neighbors:
 {% for overlay_item in overlay_bgp_neighbors %}
-  - neighbor_address: "{{ overlay_item['ip'] }}"
+  - neighbor_address: {{ overlay_item['ip'] }}
     address_family:
       - afi: l2vpn
         safi: evpn
-{% if network_role is eq('spine') %}
+{% if overlay_network_role is eq('spine') %}
         route_reflector_client: true
 {% endif %}
         send_community:

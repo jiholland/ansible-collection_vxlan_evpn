@@ -1,0 +1,5 @@
+---
+# vars file for vpc
+
+__vpc_delay_restore: 150
+__vpc_svi_delay_restore: 45

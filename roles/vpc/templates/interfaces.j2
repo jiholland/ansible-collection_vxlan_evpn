@@ -1,9 +1,9 @@
 {% for vpc_item in vpc_peerlink_lag_members %}
-- name: "{{ vpc_peerlink_lag_name }}"
+- name: {{ vpc_peerlink_lag_name }}
   description: VPC PEER LINK
   mode: layer2
   enabled: true
-- name: "{{ vpc_item }}"
+- name: {{ vpc_item }}
   mode: layer2
   enabled: true
 {% endfor %}

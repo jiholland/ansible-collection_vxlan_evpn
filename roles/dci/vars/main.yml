@@ -1,0 +1,9 @@
+---
+# vars file for dci
+
+__dci_ospf_area_id: 0.0.0.0
+__dci_ospf_process_id: UNDERLAY
+
+__dci_mtu: 9216
+
+__dci_delay_restore: 300

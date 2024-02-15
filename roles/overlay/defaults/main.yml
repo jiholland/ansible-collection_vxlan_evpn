@@ -1,17 +1,21 @@
 ---
 # defaults file for overlay
 
+# The network role as defined in inventory host_vars.
+# Options are: spine, leaf or boarder-leaf
+overlay_network_role: "{{ network_role }}"
+
 overlay_rid_if: loopback0
-overlay_rid_ip: 10.250.250.30
+# overlay_rid_ip: 10.250.250.30
 
 overlay_vtep_if: loopback1
 
-overlay_bgp_asn: 65001
-overlay_bgp_neighbors:
-  - name: SPINE-1
-    ip: 10.250.250.30
-  - name: SPINE-2
-    ip: 10.250.250.31
+# overlay_bgp_asn: 65001
+# overlay_bgp_neighbors:
+#   - name: SPINE-1
+#     ip: 10.250.250.30
+#   - name: SPINE-2
+#     ip: 10.250.250.31
 
 overlay_rmap_host_svi_name: HOST-SVI
 overlay_rmap_host_svi_tag: 12345

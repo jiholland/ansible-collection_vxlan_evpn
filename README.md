@@ -11,6 +11,12 @@ Roles included in this collection (click on the link to see the role's README an
   - `jiholland.vxlan_evpn.host_segments`([documentation](https://github.com/jiholland/ansible-collection_vxlan_evpn/blob/main/roles/host_segments/README.md))
   - `jiholland.vxlan_evpn.verify`([documentation](https://github.com/jiholland/ansible-collection_vxlan_evpn/blob/main/roles/verify/README.md))
 
+## Collection wide variables
+
+These variables should be defined as host_vars in the inventory.
+  - network_role:
+    The role each network device has in the network; spine, leaf or border-leaf.
+
 ## Installation
 
 Install via Ansible Galaxy:

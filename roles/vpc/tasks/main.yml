@@ -3,7 +3,8 @@
 
 - name: Assert that ansible_network_os is cisco.nxos.nxos.
   ansible.builtin.assert:
-    that: ansible_network_os is eq('cisco.nxos.nxos')
+    that:
+      - ansible_network_os is eq('cisco.nxos.nxos')
     fail_msg: ansible_network_os must be cisco.nxos.nxos
     quiet: true
 
@@ -55,11 +56,11 @@
     pkl_dest: "{{ vpc_keepalive_ip_dest }}"
     pkl_vrf: "{{ vpc_keepalive_vrf }}"
     role_priority: "{{ vpc_priority }}"
-    system_priority: "2000"
+    system_priority: 2000
     peer_gw: true
     auto_recovery: true
-    delay_restore: "{{ vpc_delay_restore }}"
-    delay_restore_interface_vlan: "{{ vpc_svi_delay_restore }}"
+    delay_restore: "{{ __vpc_delay_restore }}"
+    delay_restore_interface_vlan: "{{ __vpc_svi_delay_restore }}"
     state: present
   notify: Save nxos.
 

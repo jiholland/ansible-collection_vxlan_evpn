@@ -5,6 +5,18 @@ Jiholland.Vxlan_Evpn Release Notes
 .. contents:: Topics
 
 
+v24.2.0
+=======
+
+Minor Changes
+-------------
+
+- all roles - moved some variables from defaults to vars
+- all roles - prefix internal variables with double underscore
+- all roles - set network_role variable as default
+- host_segments role - fix host_segments_vrf variable typo
+- overlay and vpc role - removed quotation marks from templates
+
 v23.0.2
 =======
 

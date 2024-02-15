@@ -1,0 +1,4 @@
+---
+# vars file for host_segments
+
+__host_segments_mtu: 9216

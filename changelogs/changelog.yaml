@@ -16,3 +16,14 @@ releases:
     fragments:
     - galaxy.yml
     release_date: '2023-10-19'
+  24.2.0:
+    changes:
+      minor_changes:
+      - all roles - moved some variables from defaults to vars
+      - all roles - prefix internal variables with double underscore
+      - all roles - set network_role variable as default
+      - host_segments role - fix host_segments_vrf variable typo
+      - overlay and vpc role - removed quotation marks from templates
+    fragments:
+    - fix.yml
+    release_date: '2024-02-15'

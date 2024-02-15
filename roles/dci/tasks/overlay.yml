@@ -4,7 +4,7 @@
 - name: overlay | Set multisite ID for fabric. Ensure delay-restore is 300 seconds and advertise pip.
   cisco.nxos.nxos_config:
     lines:
-      - delay-restore time {{ dci_delay_restore }}
+      - delay-restore time {{ __dci_delay_restore }}
     parents:
       - evpn multisite border-gateway {{ dci_bgp_asn }}
   notify: Save nxos.

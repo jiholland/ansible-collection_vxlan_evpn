@@ -8,7 +8,7 @@
       cisco.nxos.nxos_command:
         commands:
           - show ip ospf neighbors
-      register: verify_ospf_neighbors
+      register: __verify_ospf_neighbors
 
     - name: Print info about OSPF.
       ansible.builtin.debug:
@@ -16,18 +16,16 @@
         verbosity: 0
       run_once: true
 
-    - name: Print OSPF Neighbors.
+    - name: Print show ip ospf neighbors.
       ansible.builtin.debug:
-        msg:
-          - show ip ospf neighbors
-          - "{{ verify_ospf_neighbors['stdout_lines'][0] }}"
+        msg: "{{ __verify_ospf_neighbors['stdout_lines'][0] }}"
         verbosity: 0
 
     - name: Get PIM neighbors.
       cisco.nxos.nxos_command:
         commands:
           - show ip pim neighbor
-      register: verify_pim_neighbors
+      register: __verify_pim_neighbors
 
     - name: Print info about PIM.
       ansible.builtin.debug:
@@ -35,11 +33,9 @@
         verbosity: 0
       run_once: true
 
-    - name: Print PIM Neighbors.
+    - name: Print show pim neighbor.
       ansible.builtin.debug:
-        msg:
-          - show ip pim neighbor
-          - "{{ verify_pim_neighbors['stdout_lines'][0] }}"
+        msg: "{{ __verify_pim_neighbors['stdout_lines'][0] }}"
         verbosity: 0
 
 
@@ -50,30 +46,28 @@
       cisco.nxos.nxos_command:
         commands:
           - show nve peers
-      register: verify_nve_peers
-      when: network_role is ansible.builtin.search('leaf')
+      register: __verify_nve_peers
+      when: verify_network_role is ansible.builtin.search('leaf')
 
     - name: Print info about NVE peers.
       ansible.builtin.debug:
         msg: You will not see any peers before hosts-traffic has been initiated between peers.
         verbosity: 0
       run_once: true
-      when: network_role is ansible.builtin.search('leaf')
+      when: verify_network_role is ansible.builtin.search('leaf')
 
-    - name: Print NVE Peers.
+    - name: Print show nve peers.
       ansible.builtin.debug:
-        msg:
-          - show nve peers
-          - "{{ verify_nve_peers['stdout_lines'][0] }}"
+        msg: "{{ __verify_nve_peers['stdout_lines'][0] }}"
         verbosity: 0
-      when: network_role is ansible.builtin.search('leaf')
+      when: verify_network_role is ansible.builtin.search('leaf')
 
 
     - name: Get EVPN BGP neigbors.
       cisco.nxos.nxos_command:
         commands:
           - show bgp l2vpn evpn summary
-      register: verify_bgp_neighbors
+      register: __verify_bgp_neighbors
 
     - name: Print info about EVPN BGP neighbors.
       ansible.builtin.debug:
@@ -83,43 +77,39 @@
         verbosity: 0
       run_once: true
 
-    - name: Print EVPN BGP neighbors.
+    - name: Print show bgp l2vpn evpn summary.
       ansible.builtin.debug:
-        msg:
-          - show bgp l2vpn evpn summary
-          - "{{ verify_bgp_neighbors['stdout_lines'][0] }}"
+        msg: "{{ __verify_bgp_neighbors['stdout_lines'][0] }}"
         verbosity: 0
 
 
 - name: Verify the VXLAN configuration.
-  when: network_role is ansible.builtin.search('leaf')
+  when: verify_network_role is ansible.builtin.search('leaf')
   block:
 
     - name: Run VXLAN config-check.
       cisco.nxos.nxos_command:
         commands:
           - show consistency-checker vxlan config-check
-      register: verify_config_check
+      register: __verify_config_check
       vars:
         ansible_command_timeout: 60
 
-    - name: Print VXLAN config-check.
+    - name: Print show consistency-checker vxlan config-check.
       ansible.builtin.debug:
-        msg:
-          - show consistency-checker vxlan config-check
-          - "{{ verify_config_check['stdout_lines'][0] }}"
+        msg: "{{ __verify_config_check['stdout_lines'][0] }}"
         verbosity: 0
 
 
 - name: Verify DCI encryption.
-  when: network_role is eq('border-leaf')
+  when: verify_network_role is eq('border-leaf')
   block:
 
     - name: Get MKA summary information.
       cisco.nxos.nxos_command:
         commands:
           - show macsec mka summary
-      register: verify_macsec_mka_summary
+      register: __verify_macsec_mka_summary
 
     - name: Print info about macsec.
       ansible.builtin.debug:
@@ -127,9 +117,7 @@
         verbosity: 0
       run_once: true
 
-    - name: Print macsec mka summary.
+    - name: Print show macsec mka summary.
       ansible.builtin.debug:
-        msg:
-          - show macsec mka summary
-          - "{{ verify_macsec_mka_summary['stdout_lines'][0] }}"
+        msg: "{{ __verify_macsec_mka_summary['stdout_lines'][0] }}"
         verbosity: 0
