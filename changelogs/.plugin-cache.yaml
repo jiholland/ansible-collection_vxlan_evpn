@@ -1,5 +1,25 @@
 objects:
-  role: {}
+  role:
+    dci:
+      description: null
+      name: dci
+      version_added: null
+    host_segments:
+      description: null
+      name: host_segments
+      version_added: null
+    overlay:
+      description: null
+      name: overlay
+      version_added: null
+    underlay:
+      description: null
+      name: underlay
+      version_added: null
+    verify:
+      description: null
+      name: verify
+      version_added: null
 plugins:
   become: {}
   cache: {}
@@ -16,4 +36,4 @@ plugins:
   strategy: {}
   test: {}
   vars: {}
-version: 24.2.1
+version: 24.2.2

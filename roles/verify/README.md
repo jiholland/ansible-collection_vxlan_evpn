@@ -31,8 +31,10 @@ Example Playbook
       tags: overlay
     - role: jiholland.vxlan_evpn.dci
       tags: dci
+      when: dci_network_role is eq('boarder-leaf')
     - role: jiholland.vxlan_evpn.host_segments
       tags: host_segments
+      when: host_segments_network_role is ansible.builtin.search('leaf')
     - role: jiholland.vxlan_evpn.verify
       tags: verify
 ```

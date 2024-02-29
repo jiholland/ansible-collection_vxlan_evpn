@@ -4,8 +4,8 @@
 # vpc_domain: 1
 # vpc_priority: 1
 
-# vpc_keepalive_ip_dest: 10.16.5.1
-# vpc_keepalive_ip_src: 10.16.5.2
+# vpc_keepalive_ip_dest: 192.0.2.1
+# vpc_keepalive_ip_src: 192.0.2.2
 # vpc_keepalive_if: Ethernet1/3
 vpc_keepalive_vrf: vpc-keepalive-link
 

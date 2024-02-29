@@ -1,6 +1,4 @@
 ---
 # defaults file for verify
 
-# The network role as defined in inventory host_vars.
-# Options are: spine, leaf or border-leaf
 verify_network_role: "{{ network_role }}"

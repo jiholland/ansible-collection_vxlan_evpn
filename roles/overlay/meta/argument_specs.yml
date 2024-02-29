@@ -1,0 +1,30 @@
+---
+# Argument specification file for overlay
+
+argument_specs:
+  main:
+    options:
+
+      overlay_network_role:
+        type: str
+        choices:
+          - spine
+          - leaf
+          - boarder-leaf
+
+      overlay_rid_if:
+        type: str
+        default: loopback0
+
+      overlay_rid_ip:
+        type: str
+        required: true
+
+      overlay_bgp_asn:
+        type: int
+        required: true
+
+      overlay_bgp_neighbors:
+        type: list
+        required: true
+        elements: dict

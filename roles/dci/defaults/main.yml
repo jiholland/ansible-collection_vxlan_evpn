@@ -1,14 +1,12 @@
 ---
 # defaults file for dci
 
-# The network role as defined in inventory host_vars.
-# Options are: spine, leaf or border-leaf
 dci_network_role: "{{ network_role }}"
 
 # dci_bgp_asn: 65001
 
 dci_rid_if: loopback0
-# dci_rid_ip: 10.250.250.38
+# dci_rid_ip: 192.0.2.38
 dci_rid_tag: 54321
 
 # dci_fabric_interfaces:
@@ -19,28 +17,28 @@ dci_route_map: RMAP-REDIST-DIRECT
 
 # dci_interfaces:
 #   - name: Ethernet1/5
-#     ip: 10.16.3.0
+#     ip: 198.51.100.0
 #     mask: 31
 #   - name: Ethernet1/6
-#     ip: 10.16.3.2
+#     ip: 198.51.100.2
 #     mask: 31
 
 # dci_bgp_neighbors:  # Underlay.
 #   - name: BGW-3
-#     ip: 10.16.3.1
+#     ip: 198.51.100.1
 #     asn: 65002
 #     source: Ethernet1/5
 #   - name: BGW-4
-#     ip: 10.16.3.3
+#     ip: 198.51.100.3
 #     asn: 65002
 #     source: Ethernet1/6
 
 # dci_ebgp_neighbors:  # Overlay.
 #   - name: BGW-3
-#     ip: 10.250.250.41
+#     ip: 192.0.2.41
 #     asn: 65002
 #   - name: BGW-4
-#     ip: 10.250.250.42
+#     ip: 192.0.2.42
 #     asn: 65002
 
-# dci_macsec_key: abc3000000000000000000000000000000000000000000000000000000000000  # Change and encrypt with Ansible vault
+# dci_macsec_key: abc3000000000000000000000000000000000000000000000000000000000000
