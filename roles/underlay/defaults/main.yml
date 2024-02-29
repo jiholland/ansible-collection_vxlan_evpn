@@ -1,8 +1,6 @@
 ---
 # defaults file for underlay
 
-# The network role as defined in inventory host_vars.
-# Options are: spine, leaf or border-leaf
 underlay_network_role: "{{ network_role }}"
 
 # underlay_fabric_interfaces:
@@ -10,22 +8,22 @@ underlay_network_role: "{{ network_role }}"
 #   - name: Ethernet1/52
 
 underlay_rid_if: loopback0
-# underlay_rid_ip: 10.250.250.30
+# underlay_rid_ip: 192.0.2.30
 underlay_rid_mask: 32
 underlay_rid_tag: 54321
 
 underlay_vtep_if: loopback1
-# underlay_vtep_ip: 10.250.250.31
-# underlay_vtep_secondary_ip: 10.250.250.33
+# underlay_vtep_ip: 192.0.2.31
+# underlay_vtep_secondary_ip: 192.0.2.33
 underlay_vtep_mask: 32
 underlay_vtep_tag: 54321
 
 underlay_pim_if: loopback254
-underlay_pim_ip: 172.16.0.254  # Anycast RP address.
+# underlay_pim_ip: 198.51.100.254  # Anycast RP address.
 underlay_pim_mask: 32
 underlay_pim_group_range: 239.239.0.0/16
-# underlay_pim_ip_remote: 10.250.250.29
+# underlay_pim_ip_remote: 192.0.2.29
 
 # underlay_vpc_domain: 1
 # underlay_vpc_nve_vlan: 77
-# underlay_vpc_nve_ip: 10.77.77.1
+# underlay_vpc_nve_ip: 203.0.113.1

@@ -1,8 +1,6 @@
 ---
 # defaults file for host_segments
 
-# The network role as defined in inventory host_vars.
-# Options are: spine, leaf or border-leaf
 host_segments_network_role: "{{ network_role }}"
 
 host_segments_rmap_host_svi_name: HOST-SVI
@@ -28,13 +26,13 @@ host_segments_l3:
   #   vni_id: 10100
   #   vlan_id: 100
   #   vlan_name: Servers
-  #   vlan_svi_ip: 172.16.100.1/24
+  #   vlan_svi_ip: 192.0.2.1/24
   #   vlan_svi_description: L2 VNI HOST SEGMENT WITH ANYCAST GATEWAY
   # - vrf: Tenant-2
   #   vni_id: 20200
   #   vlan_id: 200
   #   vlan_name: Netflix
-  #   vlan_svi_ip: 192.168.200.1/24
+  #   vlan_svi_ip: 203.0.113.1/24
   #   vlan_svi_description: L2 VNI HOST SEGMENT WITH ANYCAST GATEWAY
 
 # Hosts segments without distributed anycast gateway

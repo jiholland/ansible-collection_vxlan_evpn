@@ -12,7 +12,7 @@ Configure underlay for multisite VXLAN-EVPN fabric on Cisco Nexus platform:
        + - - - - - - - - - - - - - - - - - - - - - - -
        +--------------------+    +--------------------+
        |      SPINE-1       |    |      SPINE-2       |
-       | RID 10.250.250.30  |    | RID 10.250.250.31  |
+       |   RID 192.0.2.30   |    |    RID 192.0.2.31  |
        +--------------------+    +--------------------+
                 | |                       | |
            +-+--+-+-----------------------+ |
@@ -20,8 +20,8 @@ Configure underlay for multisite VXLAN-EVPN fabric on Cisco Nexus platform:
            | |                                    | |
 +--------------------+                            | |
 |       LEAF-1       |                 +------------+-------+
-| RID 10.250.250.32  |                 |       LEAF-2       |
-+--------------------+                 | RID 10.250.250.33  |
+|   RID 192.0.2.32   |                 |       LEAF-2       |
++--------------------+                 |    RID 192.0.2.33  |
                                        +--------------------+
 ```
 Requirements
@@ -69,8 +69,10 @@ Example Playbook
       tags: overlay
     - role: jiholland.vxlan_evpn.dci
       tags: dci
+      when: dci_network_role is eq('boarder-leaf')
     - role: jiholland.vxlan_evpn.host_segments
       tags: host_segments
+      when: host_segments_network_role is ansible.builtin.search('leaf')
     - role: jiholland.vxlan_evpn.verify
       tags: verify
 ```

@@ -1,0 +1,61 @@
+---
+# Argument specification file for dci
+
+argument_specs:
+  main:
+    options:
+
+      dci_network_role:
+        type: str
+        choices:
+          - spine
+          - leaf
+          - boarder-leaf
+
+      dci_bgp_asn:
+        type: int
+        required: true
+
+      dci_rid_if:
+        type: str
+        default: loopback0
+
+      dci_rid_ip:
+        type: str
+        required: true
+
+      dci_rid_tag:
+        type: int
+        default: 54321
+
+      dci_route_map:
+        type: str
+        default: RMAP-REDIST-DIRECT
+
+      dci_fabric_interfaces:
+        description: The fabric facing interfaces connecting spines to boarder-leafs.
+        type: list
+        required: true
+        elements: dict
+
+      dci_interfaces:
+        description: The dci facing interfaces used to interconnecting pods.
+        type: list
+        required: true
+        elements: dict
+
+      dci_bgp_neighbors:
+        description: iBGP underlay neighbors.
+        type: list
+        required: true
+        elements: dict
+
+      dci_ebgp_neighbors:
+        description: eBGP overlay neighbors.
+        type: list
+        required: true
+        elements: dict
+
+      dci_macsec_key:
+        type: str
+        required: true

@@ -14,7 +14,7 @@ Configure host segments for multisite VXLAN-EVPN fabric on Cisco Nexus platform.
         | VLAN 100                         VLAN 100  v
 +---------------+                            +---------------+
 |    HOST-A     |                            |    HOST-B     |
-|172.16.100.2/24| HOST-A$ ping 172.16.100.3  |172.16.100.3/24|
+|  192.0.2.2/24 |  HOST-A$ ping 192.0.2.3    |  192.0.2.3/24 |
 |   VLAN 100    |- - - - - - - - - - - - - ->|   VLAN 100    |
 |   VNI 10100   |                            |   VNI 10100   |
 +---------------+                            +---------------+
@@ -35,7 +35,7 @@ Configure host segments for multisite VXLAN-EVPN fabric on Cisco Nexus platform.
         | VLAN 100                         VLAN 101 v        
 +---------------+                           +---------------+
 |    HOST-A     |                           |    HOST-C     |
-|172.16.100.2/24| HOST-A$ ping 172.16.101.2 |172.16.101.2/24|
+| 192.0.2.2/24  | HOST-A$ ping 203.0.113.2  |203.0.113.2/24 |
 |   VLAN 100    |- - - - - - - - - - - - - >|   VLAN 101    |
 |   VNI 10100   |                           |   VNI 10101   |
 +---------------+                           +---------------+
@@ -65,8 +65,8 @@ Note: BUM between sites (dci) are always ingress-replicated (unicast).
 |1.ARP| |                                           | |4.ARP|           |
 +-----+ |                                           v +-----+           |
 +---------------+                           +---------------+   +---------------+
-|    HOST-A     | HOST-A$ ping 172.16.100.3 |    HOST-B     |   |    HOST-C     |
-|172.16.100.2/24|   (MAC unknown --> ARP)   |172.16.100.3/24|   |172.16.101.2/24|
+|    HOST-A     |   HOST-A$ ping 192.0.2.3  |    HOST-B     |   |    HOST-C     |
+|  192.0.2.2/24 |   (MAC unknown --> ARP)   | 192.0.2.3/24  |   | 203.0.113.2/24|
 |   VLAN 100    |- - - - - - - - - - - - - >|   VLAN 100    |   |   VLAN 101    |
 |   VNI 10100   |                           |   VNI 10100   |   |   VNI 10101   |
 |Mcast 239.0.0.1|                           |Mcast 239.0.0.1|   |Mcast 239.0.0.2|
@@ -106,8 +106,10 @@ Example Playbook
       tags: overlay
     - role: jiholland.vxlan_evpn.dci
       tags: dci
+      when: dci_network_role is eq('boarder-leaf')
     - role: jiholland.vxlan_evpn.host_segments
       tags: host_segments
+      when: host_segments_network_role is ansible.builtin.search('leaf')
     - role: jiholland.vxlan_evpn.verify
       tags: verify
 ```

@@ -5,6 +5,15 @@ Jiholland.Vxlan_Evpn Release Notes
 .. contents:: Topics
 
 
+v24.2.2
+=======
+
+Minor Changes
+-------------
+
+- all roles - added arg spec
+- all roles - use IPv4 Address Blocks Reserved for Documentation
+
 v24.2.1
 =======
 

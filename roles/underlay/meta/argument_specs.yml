@@ -1,0 +1,40 @@
+---
+# Argument specification file for underlay
+
+argument_specs:
+  main:
+    options:
+
+      underlay_network_role:
+        type: str
+        choices:
+          - spine
+          - leaf
+          - boarder-leaf
+
+      underlay_fabric_interfaces:
+        description: The fabric facing interfaces connecting spines to leafs.
+        type: list
+        required: true
+        elements: dict
+
+      underlay_rid_if:
+        type: str
+        default: loopback0
+
+      underlay_rid_ip:
+        type: str
+        required: true
+
+      underlay_rid_mask:
+        type: str
+        default: 32
+
+      underlay_pim_ip:
+        description: Anycast RP address.
+        type: str
+        required: true
+
+      underlay_pim_group_range:
+        type: str
+        default: 239.239.0.0/16
