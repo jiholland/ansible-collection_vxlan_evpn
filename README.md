@@ -15,7 +15,7 @@ Roles included in this collection (click on the link to see the role's README an
 
 These variables should be defined as host_vars in the inventory.
   - network_role:
-    The role each network device has in the network; spine, leaf or border-leaf.
+    The role each network device has in the network; spine, leaf or boarder-leaf.
 
 ## Installation
 
