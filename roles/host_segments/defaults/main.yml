@@ -3,9 +3,6 @@
 
 host_segments_network_role: "{{ network_role }}"
 
-host_segments_rmap_host_svi_name: HOST-SVI
-host_segments_rmap_host_svi_tag: 12345
-
 host_segments_vrfs:
   # - vrf_name: Tenant-1
   #   vrf_description: VRF for Tenant-1

@@ -21,6 +21,6 @@ router bgp {{ vxlan['bgp']['asn'] }}
   vrf {{ host_segments_item['vrf'] }}
     address-family ipv4 unicast
       advertise l2vpn evpn
-      redistribute direct route-map {{ host_segments_rmap_host_svi_name }}
+      redistribute direct route-map {{ __host_segments_rmap_host_svi_name }}
       maximum-paths 64
 {% endfor %}

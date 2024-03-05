@@ -1,7 +1,7 @@
 as_number: {{ dci_bgp_asn }}
 neighbors:
-{% for dci_item in dci_ebgp_neighbors %}
-  - neighbor_address: {{ dci_item['ip'] }}
+{% for dci_item in dci_overlay_bgp_neighbors %}
+  - neighbor_address: {{ dci_item['neighbor_ip'] }}
     address_family:
       - afi: l2vpn
         safi: evpn

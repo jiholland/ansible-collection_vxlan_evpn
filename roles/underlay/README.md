@@ -37,12 +37,10 @@ Role Variables
 - underlay_rid_if
 - underlay_rid_ip
 - underlay_rid_mask
-- underlay_rid_tag
 - underlay_vtep_if
 - underlay_vtep_ip
 - underlay_vtep_secondary_ip
 - underlay_vtep_mask
-- underlay_vtep_tag
 - underlay_pim_if
 - underlay_pim_mask
 - underlay_pim_ip_remote
@@ -69,7 +67,7 @@ Example Playbook
       tags: overlay
     - role: jiholland.vxlan_evpn.dci
       tags: dci
-      when: dci_network_role is eq('boarder-leaf')
+      when: dci_network_role is eq('border-leaf')
     - role: jiholland.vxlan_evpn.host_segments
       tags: host_segments
       when: host_segments_network_role is ansible.builtin.search('leaf')

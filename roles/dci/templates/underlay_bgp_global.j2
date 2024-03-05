@@ -2,9 +2,9 @@ as_number: {{ dci_bgp_asn }}
 router_id: {{ dci_rid_ip }}
 log_neighbor_changes: true
 neighbors:
-{% for dci_item in dci_bgp_neighbors %}
-  - neighbor_address: {{ dci_item['ip'] }}
-    remote_as: {{ dci_item['asn'] }}
-    description: {{ dci_item['name'] }}
+{% for dci_item in dci_underlay_bgp_neighbors %}
+  - neighbor_address: {{ dci_item['neighbor_ip'] }}
+    remote_as: {{ dci_item['neighbor_asn'] }}
+    description: {{ dci_item['description'] }}
     update_source: {{ dci_item['source'] }}
 {% endfor %}

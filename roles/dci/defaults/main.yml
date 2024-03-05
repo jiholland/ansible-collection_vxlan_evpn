@@ -3,19 +3,16 @@
 
 dci_network_role: "{{ network_role }}"
 
-# dci_bgp_asn: 65001
+# dci_bgp_asn: 64501
 
 dci_rid_if: loopback0
 # dci_rid_ip: 192.0.2.38
-dci_rid_tag: 54321
 
-# dci_fabric_interfaces:
-#   - name: Ethernet1/7
-#   - name: Ethernet1/8
+dci_dci_if: loopback100
+# dci_dci_ip: 203.0.113.2
+dci_dci_mask: 32
 
-dci_route_map: RMAP-REDIST-DIRECT
-
-# dci_interfaces:
+# dci_dci_interfaces:
 #   - name: Ethernet1/5
 #     ip: 198.51.100.0
 #     mask: 31
@@ -23,22 +20,29 @@ dci_route_map: RMAP-REDIST-DIRECT
 #     ip: 198.51.100.2
 #     mask: 31
 
-# dci_bgp_neighbors:  # Underlay.
-#   - name: BGW-3
-#     ip: 198.51.100.1
-#     asn: 65002
+# dci_fabric_interfaces:
+#   - name: Ethernet1/7
+#   - name: Ethernet1/8
+
+# dci_underlay_bgp_neighbors:
+#   - description: BGW-3
+#     neighbor_ip: 198.51.100.1
+#     neighbor_asn: 64502
 #     source: Ethernet1/5
-#   - name: BGW-4
-#     ip: 198.51.100.3
-#     asn: 65002
+#   - description: BGW-4
+#     neighbor_ip: 198.51.100.3
+#     neighbor_asn: 64502
 #     source: Ethernet1/6
 
-# dci_ebgp_neighbors:  # Overlay.
-#   - name: BGW-3
-#     ip: 192.0.2.41
-#     asn: 65002
-#   - name: BGW-4
-#     ip: 192.0.2.42
-#     asn: 65002
+# dci_overlay_bgp_neighbors:
+#   - description: BGW-3
+#     neighbor_ip: 192.0.2.41
+#     neighbor_asn: 64502
+#     source: "{{ dci_rid_if }}"
+#   - description: BGW-4
+#     neighbor_ip: 192.0.2.42
+#     neighbor_asn: 64502
+#     source: "{{ dci_rid_if }}"
 
-# dci_macsec_key: abc3000000000000000000000000000000000000000000000000000000000000
+dci_macsec_key_algorithm: AES_256_CMAC
+# dci_macsec_key_string: abc3000000000000000000000000000000000000000000000000000000000000

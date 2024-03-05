@@ -93,7 +93,8 @@
           - show consistency-checker vxlan config-check
       register: __verify_config_check
       vars:
-        ansible_command_timeout: 60
+        ansible_command_timeout: "{{ __verify_vxlan_config_check_timeout }}"
+        ansible_connect_timeout: "{{ __verify_vxlan_config_check_timeout }}"
 
     - name: Print show consistency-checker vxlan config-check.
       ansible.builtin.debug:

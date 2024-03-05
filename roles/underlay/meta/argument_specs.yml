@@ -10,7 +10,8 @@ argument_specs:
         choices:
           - spine
           - leaf
-          - boarder-leaf
+          - service-leaf
+          - border-leaf
 
       underlay_fabric_interfaces:
         description: The fabric facing interfaces connecting spines to leafs.

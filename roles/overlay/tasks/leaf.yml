@@ -11,6 +11,8 @@
     - vn-segment-vlan-based
   loop_control:
     loop_var: overlay_item
+  check_mode: false
+  notify: Save nxos.
 
 - name: leaf | Enable EVPN control plane for VXLAN.
   cisco.nxos.nxos_evpn_global:
@@ -32,12 +34,12 @@
 - name: leaf | Create route-map to redistribute Host-SVI (Silent Host).
   cisco.nxos.nxos_route_maps:
     config:
-      - route_map: "{{ overlay_rmap_host_svi_name }}"
+      - route_map: "{{ __overlay_rmap_host_svi_name }}"
         entries:
           - sequence: 10
             action: permit
             match:
-              tags: "{{ overlay_rmap_host_svi_tag }}"
+              tags: "{{ __overlay_rmap_host_svi_tag }}"
     state: merged
   notify: Save nxos.
 

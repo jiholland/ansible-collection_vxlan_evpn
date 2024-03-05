@@ -50,27 +50,27 @@ Note: BUM between sites (dci) are always ingress-replicated (unicast).
                      |   SPINE-1    |
                      +--------------+
                             ^ |  |
-                            | |  +--------------239.0.0.2---------------+
-                            | |                                         |
-+-----+ +------239.0.0.1----+ +----239.0.0.1--------+ +-----+           |
-|2.ARP| |                                           | |3.ARP|   +--------------+
-+-----+ |                                           | +-----+   |    LEAF-3    |
-        |                                           v           |     VTEP     |
-+--------------+                            +--------------+    +--------------+
-|    LEAF-1    |         VNI 10100          |    LEAF-2    |            |
-|     VTEP     |--------------------------->|     VTEP     |            |
-+--------------+                            +--------------+            |
-        ^                                           |                   |
-+-----+ |                                           | +-----+           |
-|1.ARP| |                                           | |4.ARP|           |
-+-----+ |                                           v +-----+           |
-+---------------+                           +---------------+   +---------------+
-|    HOST-A     |   HOST-A$ ping 192.0.2.3  |    HOST-B     |   |    HOST-C     |
-|  192.0.2.2/24 |   (MAC unknown --> ARP)   | 192.0.2.3/24  |   | 203.0.113.2/24|
-|   VLAN 100    |- - - - - - - - - - - - - >|   VLAN 100    |   |   VLAN 101    |
-|   VNI 10100   |                           |   VNI 10100   |   |   VNI 10101   |
-|Mcast 239.0.0.1|                           |Mcast 239.0.0.1|   |Mcast 239.0.0.2|
-+---------------+                           +---------------+   +---------------+
+                            | |  +--------------233.252.0.2--------------+
+                            | |                                          |
++-----+ +----233.252.0.1----+ +----233.252.0.1------+ +-----+            |
+|2.ARP| |                                           | |3.ARP|    +--------------+
++-----+ |                                           | +-----+    |    LEAF-3    |
+        |                                           v            |     VTEP     |
++--------------+                            +--------------+     +--------------+
+|    LEAF-1    |         VNI 10100          |    LEAF-2    |             |
+|     VTEP     |--------------------------->|     VTEP     |             |
++--------------+                            +--------------+             |
+        ^                                           |                    |
++-----+ |                                           | +-----+            |
+|1.ARP| |                                           | |4.ARP|            |
++-----+ |                                           v +-----+            |
++-----------------+                         +-----------------+   +-----------------+
+|     HOST-A      | HOST-A$ ping 192.0.2.3  |     HOST-B      |   |     HOST-C      |
+|   192.0.2.2/24  | (MAC unknown --> ARP)   |  192.0.2.3/24   |   |  203.0.113.2/24 |
+|    VLAN 100     |- - - - - - - - - - - - >|    VLAN 100     |   |    VLAN 101     |
+|    VNI 10100    |                         |    VNI 10100    |   |    VNI 10101    |
+|Mcast 233.252.0.1|                         |Mcast 233.252.0.1|   |Mcast 233.252.0.2|
++-----------------+                         +-----------------+   +-----------------+
 ```
 
 Requirements
@@ -82,8 +82,6 @@ Role Variables
 --------------
 
 - host_segments_network_role
-- host_segments_rmap_host_svi_name
-- host_segments_rmap_host_svi_tag
 - host_segments_l2
 - host_segments_l3
 - host_segments_vrf
@@ -106,7 +104,7 @@ Example Playbook
       tags: overlay
     - role: jiholland.vxlan_evpn.dci
       tags: dci
-      when: dci_network_role is eq('boarder-leaf')
+      when: dci_network_role is eq('border-leaf')
     - role: jiholland.vxlan_evpn.host_segments
       tags: host_segments
       when: host_segments_network_role is ansible.builtin.search('leaf')

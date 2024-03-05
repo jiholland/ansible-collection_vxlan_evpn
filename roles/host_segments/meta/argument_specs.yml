@@ -10,4 +10,5 @@ argument_specs:
         choices:
           - spine
           - leaf
-          - boarder-leaf
+          - service-leaf
+          - border-leaf

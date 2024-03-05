@@ -12,7 +12,7 @@
 - name: overlay | Add multisite VIP VTEP loopback to NVE-interface.
   cisco.nxos.nxos_vxlan_vtep:
     interface: nve1
-    multisite_border_gateway_interface: "{{ dci_if }}"
+    multisite_border_gateway_interface: "{{ dci_dci_if }}"
     state: present
   notify: Save nxos.
 

@@ -5,6 +5,16 @@ Jiholland.Vxlan_Evpn Release Notes
 .. contents:: Topics
 
 
+v24.3.0
+=======
+
+Minor Changes
+-------------
+
+- all roles - timeout as variable
+- all roles - use check_mode for some tasks
+- dci role - various improvements
+
 v24.2.2
 =======
 

@@ -1,7 +1,9 @@
-key chain 1 macsec
- key 1000
-  key-octet-string {{ dci_macsec_key }} cryptographic-algorithm AES_256_CMAC
-{% for dci_item in dci_interfaces %}
+key chain {{ __dci_macsec_key_chain }} macsec
+{% if not ansible_check_mode %}
+ key {{ __dci_macsec_key_id }}
+  key-octet-string {{ dci_macsec_key_string }} cryptographic-algorithm {{ dci_macsec_key_algorithm }}
+{% endif %}
+{% for dci_item in dci_dci_interfaces %}
 interface {{ dci_item['name'] }}
- macsec keychain 1 policy system-default-macsec-policy
+ macsec keychain {{ __dci_macsec_key_chain }} policy {{ __dci_macsec_mka_policy }}
 {% endfor %}

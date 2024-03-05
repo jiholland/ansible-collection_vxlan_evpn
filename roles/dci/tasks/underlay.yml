@@ -4,16 +4,26 @@
 - name: underlay | Create and enable L3 DCI loopback interface. Ensure interface-description.
   cisco.nxos.nxos_interfaces:
     config:
-      - name: "{{ dci_if }}"
+      - name: "{{ dci_dci_if }}"
         description: MULTISITE DCI INTERFACE
         enabled: true
+    state: merged
+  notify: Save nxos.
+
+- name: underlay | Assign IP address and tag to L3 DCI loopback fabric interfaces.
+  cisco.nxos.nxos_l3_interfaces:
+    config:
+      - name: "{{ dci_dci_if }}"
+        ipv4:
+          - address: "{{ dci_dci_ip }}/{{ dci_dci_mask }}"
+            tag: "{{ __dci_route_map_tag }}"
     state: merged
   notify: Save nxos.
 
 - name: underlay | Associate L3 DCI loopback interface with OSFP process.
   cisco.nxos.nxos_ospf_interfaces:
     config:
-      - name: "{{ dci_if }}"
+      - name: "{{ dci_dci_if }}"
         address_family:
           - afi: ipv4
             processes:
@@ -54,12 +64,12 @@
 - name: underlay | Create route-map for redistribution of directly connected routes.
   cisco.nxos.nxos_route_maps:
     config:
-      - route_map: "{{ dci_route_map }}"
+      - route_map: "{{ __dci_route_map_name }}"
         entries:
           - sequence: 10
             action: permit
             match:
-              tags: "{{ dci_rid_tag }}"
+              tags: "{{ __dci_route_map_tag }}"
     state: merged
   notify: Save nxos.
 
@@ -74,6 +84,6 @@
             parallel_paths: 4
           redistribute:
             - protocol: direct
-              route_map: "{{ dci_route_map }}"
+              route_map: "{{ __dci_route_map_name }}"
     state: merged
   notify: Save nxos.

@@ -11,6 +11,7 @@
     - pim
   loop_control:
     loop_var: underlay_item
+  check_mode: false
   notify: Save nxos.
 
 - name: spine | Create L3 RID and PIM loopbacks. Enable and set physical fabric interfaces in L3 mode. Ensure jumbo MTU.

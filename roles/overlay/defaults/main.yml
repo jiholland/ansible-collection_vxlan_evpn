@@ -8,15 +8,13 @@ overlay_rid_if: loopback0
 
 overlay_vtep_if: loopback1
 
-# overlay_bgp_asn: 65001
+# overlay_bgp_asn: 64501
+
 # overlay_bgp_neighbors:
 #   - name: SPINE-1
 #     ip: 192.0.2.30
 #   - name: SPINE-2
 #     ip: 192.0.2.31
 
-overlay_rmap_host_svi_name: HOST-SVI
-overlay_rmap_host_svi_tag: 12345
-
-overlay_anycast_gw_mac: 2020.DEAD.BEEF
-overlay_global_mcast_group_l2: 239.239.239.239
+overlay_anycast_gw_mac: 0000.5E00.5300
+overlay_global_mcast_group_l2: 233.252.0.239

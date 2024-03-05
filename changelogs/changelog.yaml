@@ -42,3 +42,13 @@ releases:
     fragments:
     - fix.yml
     release_date: '2024-02-29'
+  24.3.0:
+    changes:
+      minor_changes:
+      - all roles - timeout as variable
+      - all roles - use check_mode for some tasks
+      - dci role - various improvements
+    fragments:
+    - changed_when.yml
+    - dci.yml
+    release_date: '2024-03-05'

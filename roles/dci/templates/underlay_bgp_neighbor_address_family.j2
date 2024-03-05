@@ -1,7 +1,7 @@
 as_number: {{ dci_bgp_asn }}
 neighbors:
-{% for dci_item in dci_bgp_neighbors %}
-  - neighbor_address: {{ dci_item['ip'] }}
+{% for dci_item in dci_underlay_bgp_neighbors %}
+  - neighbor_address: {{ dci_item['neighbor_ip'] }}
     address_family:
       - afi: ipv4
         safi: unicast

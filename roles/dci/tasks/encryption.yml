@@ -5,10 +5,33 @@
   cisco.nxos.nxos_feature:
     feature: macsec
     state: enabled
+  check_mode: false
   notify: Save nxos.
+
+- name: encryption | Ensure key string.
+  block:
+
+    - name: encryption | Ensure key is hex.
+      ansible.builtin.assert:
+        that:
+          - dci_macsec_key_string is ansible.builtin.regex('^[0-9a-fA-F]+$')
+        fail_msg: Key is not hex.
+
+    - name: encryption | Ensure key length.
+      ansible.builtin.assert:
+        that:
+          - dci_macsec_key_string | length is eq(64)
+        fail_msg: Key must be 64 digits.
+      when: dci_macsec_key_algorithm is eq('AES_256_CMAC')
+
+    - name: encryption | Ensure key length.
+      ansible.builtin.assert:
+        that:
+          - dci_macsec_key_string | length is le(32)
+        fail_msg: Key must be between 1 and 32 digits.
+      when: dci_macsec_key_algorithm is eq('AES_128_CMAC')
 
 - name: encryption | Configure MACsec keychain and key. Apply MACsec policy to DCI-interfaces.
   cisco.nxos.nxos_config:
     src: encryption.j2
-  when: not ansible_check_mode
   no_log: true
