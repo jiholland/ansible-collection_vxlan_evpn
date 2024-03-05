@@ -16,16 +16,18 @@ Role Variables
 --------------
 
 - dci_network_role
+- dci_dci_if
+- dci_dci_ip
+- dci_dci_mask
+- dci_dci_interfaces
 - dci_bgp_asn
 - dci_rid_if
 - dci_rid_ip
-- dci_rid_tag
+- dci_underlay_bgp_neighbors
 - dci_fabric_interfaces
-- dci_route_map
-- dci_interfaces
-- dci_bgp_neighbors
-- dci_ebgp_neighbors
-- dci_macsec_key
+- dci_overlay_bgp_neighbors
+- dci_macsec_key_algorithm
+- dci_macsec_key_string
 
 Example Playbook
 ----------------
@@ -45,7 +47,7 @@ Example Playbook
       tags: overlay
     - role: jiholland.vxlan_evpn.dci
       tags: dci
-      when: dci_network_role is eq('boarder-leaf')
+      when: dci_network_role is eq('border-leaf')
     - role: jiholland.vxlan_evpn.host_segments
       tags: host_segments
       when: host_segments_network_role is ansible.builtin.search('leaf')

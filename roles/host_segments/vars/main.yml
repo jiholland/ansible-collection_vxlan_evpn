@@ -2,3 +2,10 @@
 # vars file for host_segments
 
 __host_segments_mtu: 9216
+
+# Route-map to Redistribute Host-SVI (Silent Host)
+__host_segments_rmap_host_svi_name: HOST-SVI
+__host_segments_rmap_host_svi_tag: 12345
+
+# Timeout in seconds for creating host segments.
+__host_segments_timeout: 1200

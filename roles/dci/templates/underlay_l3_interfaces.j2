@@ -1,6 +1,6 @@
-{% for dci_item in dci_interfaces %}
+{% for dci_item in dci_dci_interfaces %}
 - name: {{ dci_item['name'] }}
   ipv4:
     - address: {{ dci_item['ip'] }}/{{ dci_item['mask'] }}
-        tag: {{ dci_rid_tag }}
+      tag: {{ __dci_route_map_tag }}
 {% endfor %}

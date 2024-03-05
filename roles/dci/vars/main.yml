@@ -6,4 +6,13 @@ __dci_ospf_process_id: UNDERLAY
 
 __dci_mtu: 9216
 
+__dci_route_map_name: RMAP-REDIST-DIRECT
+__dci_route_map_tag: 54321
+
 __dci_delay_restore: 300
+
+__dci_ebgp_multihop: 2
+
+__dci_macsec_key_chain: 1
+__dci_macsec_key_id: 1000
+__dci_macsec_mka_policy: system-default-macsec-policy

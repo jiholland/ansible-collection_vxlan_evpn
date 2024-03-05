@@ -1,0 +1,4 @@
+---
+# vars file for verify
+
+__verify_vxlan_config_check_timeout: 60

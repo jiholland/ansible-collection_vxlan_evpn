@@ -8,11 +8,25 @@ argument_specs:
       dci_network_role:
         type: str
         choices:
-          - spine
-          - leaf
-          - boarder-leaf
+          - border-leaf
+
+      dci_dci_if:
+        type: str
+        default: loopback100
+
+      dci_dci_ip:
+        description: Multi-site interface vip vtep ip.
+        type: str
+        required: true
+
+      dci_dci_interfaces:
+        description: The dci facing interfaces connecting border-leafs to border-leafs across each pod.
+        type: list
+        required: true
+        elements: dict
 
       dci_bgp_asn:
+        description: BGP ASN for underlay and overlay.
         type: int
         required: true
 
@@ -24,38 +38,30 @@ argument_specs:
         type: str
         required: true
 
-      dci_rid_tag:
-        type: int
-        default: 54321
-
-      dci_route_map:
-        type: str
-        default: RMAP-REDIST-DIRECT
-
       dci_fabric_interfaces:
-        description: The fabric facing interfaces connecting spines to boarder-leafs.
+        description: The fabric facing interfaces connecting spines to border-leafs.
         type: list
         required: true
         elements: dict
 
-      dci_interfaces:
-        description: The dci facing interfaces used to interconnecting pods.
+      dci_underlay_bgp_neighbors:
+        description: BGP underlay neighbors.
         type: list
         required: true
         elements: dict
 
-      dci_bgp_neighbors:
-        description: iBGP underlay neighbors.
+      dci_overlay_bgp_neighbors:
+        description: BGP overlay neighbors.
         type: list
         required: true
         elements: dict
 
-      dci_ebgp_neighbors:
-        description: eBGP overlay neighbors.
-        type: list
-        required: true
-        elements: dict
+      dci_macsec_key_algorithm:
+        type: str
+        choices:
+          - AES_128_CMAC
+          - AES_256_CMAC
 
-      dci_macsec_key:
+      dci_macsec_key_string:
         type: str
         required: true

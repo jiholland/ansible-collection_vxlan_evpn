@@ -6,7 +6,7 @@ interface Vlan{{ host_segments_item['vlan_id'] }}
   vrf member {{ host_segments_item['vrf'] }}
   mtu {{ __host_segments_mtu }}
   fabric forwarding mode anycast-gateway
-  ip address {{ host_segments_item['vlan_svi_ip'] }} tag {{ host_segments_rmap_host_svi_tag }}
+  ip address {{ host_segments_item['vlan_svi_ip'] }} tag {{ __host_segments_rmap_host_svi_tag }}
   no ip redirects
   no shutdown
 interface nve1

@@ -5,7 +5,7 @@ Configure overlay for multisite VXLAN-EVPN fabric on Cisco Nexus platform:
 - iBGP EVPN control plane.
 - Multicast-replication (BUM).
 ```YAML
-                         BGP ASN 65001
+                         BGP ASN 64501
         +--------------------+   +--------------------+
         |      SPINE-1       |   |      SPINE-2       |
         |   RID 192.0.2.30   |   |   RID 192.0.2.31   |
@@ -27,7 +27,7 @@ Configure overlay for multisite VXLAN-EVPN fabric on Cisco Nexus platform:
 + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                  Distributed Anycast Gateway                 |
 |                    GW IP 198.51.100.1
-                    GW MAC 2020.DEAD.BEEF                    |
+                    GW MAC 0000.5E00.5300                    |
 + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ```
 Requirements
@@ -44,8 +44,6 @@ Role Variables
 - overlay_vtep_if
 - overlay_bgp_asn
 - overlay_bgp_neighbors
-- overlay_rmap_host_svi_name
-- overlay_rmap_host_svi_tag
 - overlay_anycast_gw_mac
 - overlay_global_mcast_group_l2
 
@@ -67,7 +65,7 @@ Example Playbook
       tags: overlay
     - role: jiholland.vxlan_evpn.dci
       tags: dci
-      when: dci_network_role is eq('boarder-leaf')
+      when: dci_network_role is eq('border-leaf')
     - role: jiholland.vxlan_evpn.host_segments
       tags: host_segments
       when: host_segments_network_role is ansible.builtin.search('leaf')

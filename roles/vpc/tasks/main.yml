@@ -17,6 +17,8 @@
     - lacp
   loop_control:
     loop_var: vpc_item
+  check_mode: false
+  notify: Save nxos.
 
 - name: Create tenant VRF context for vPC keepalive.
   cisco.nxos.nxos_vrf:
@@ -119,7 +121,6 @@
         lines:
           - spanning-tree bridge assurance
       when: not ansible_check_mode
-      notify: Save nxos.
 
     - name: Set STP port type to network.
       cisco.nxos.nxos_config:

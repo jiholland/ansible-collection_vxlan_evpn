@@ -10,6 +10,8 @@
     - bgp
   loop_control:
     loop_var: overlay_item
+  check_mode: false
+  notify: Save nxos.
 
 - name: spine | Enable EVPN control plane for VXLAN.
   cisco.nxos.nxos_evpn_global:

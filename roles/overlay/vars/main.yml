@@ -1,0 +1,6 @@
+---
+# vars file for overlay
+
+# Route-map to Redistribute Host-SVI (Silent Host)
+__overlay_rmap_host_svi_name: HOST-SVI
+__overlay_rmap_host_svi_tag: 12345

@@ -10,18 +10,16 @@ underlay_network_role: "{{ network_role }}"
 underlay_rid_if: loopback0
 # underlay_rid_ip: 192.0.2.30
 underlay_rid_mask: 32
-underlay_rid_tag: 54321
 
 underlay_vtep_if: loopback1
 # underlay_vtep_ip: 192.0.2.31
 # underlay_vtep_secondary_ip: 192.0.2.33
 underlay_vtep_mask: 32
-underlay_vtep_tag: 54321
 
 underlay_pim_if: loopback254
 # underlay_pim_ip: 198.51.100.254  # Anycast RP address.
 underlay_pim_mask: 32
-underlay_pim_group_range: 239.239.0.0/16
+underlay_pim_group_range: 233.252.0.0/24
 # underlay_pim_ip_remote: 192.0.2.29
 
 # underlay_vpc_domain: 1
