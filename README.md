@@ -14,8 +14,8 @@ Roles included in this collection (click on the link to see the role's README an
 ## Collection wide variables
 
 These variables should be defined as host_vars in the inventory.
-  - network_role:
-    The role each network device has in the network (spine, leaf etc).
+
+  - network_role: the role each network device has in the network (spine, leaf etc).
 
 ## Installation
 
