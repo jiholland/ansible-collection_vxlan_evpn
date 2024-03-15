@@ -69,7 +69,8 @@
           - sequence: 10
             action: permit
             match:
-              tags: "{{ __dci_route_map_tag }}"
+              tags:
+                - "{{ __dci_route_map_tag }}"
     state: merged
   notify: Save nxos.
 
