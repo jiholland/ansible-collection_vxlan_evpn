@@ -39,7 +39,8 @@
           - sequence: 10
             action: permit
             match:
-              tags: "{{ __overlay_rmap_host_svi_tag }}"
+              tags:
+                - "{{ __overlay_rmap_host_svi_tag }}"
     state: merged
   notify: Save nxos.
 
