@@ -4,9 +4,9 @@
 - name: overlay | Set multisite ID for fabric. Ensure delay-restore is 300 seconds and advertise pip.
   cisco.nxos.nxos_config:
     lines:
-      - delay-restore time {{ __dci_delay_restore }}
+      - "delay-restore time {{ __dci_delay_restore }}"
     parents:
-      - evpn multisite border-gateway {{ dci_bgp_asn }}
+      - "evpn multisite border-gateway {{ dci_bgp_asn }}"
   notify: Save nxos.
 
 - name: overlay | Add multisite VIP VTEP loopback to NVE-interface.
@@ -37,7 +37,7 @@
 - name: overlay | Ensure EVPN multisite storm suppression for DCI interfaces.
   cisco.nxos.nxos_config:
     lines:
-      - evpn storm-control unicast level 5
-      - evpn storm-control multicast level 5
-      - evpn storm-control broadcast level 5
+      - "evpn storm-control unicast level 5"
+      - "evpn storm-control multicast level 5"
+      - "evpn storm-control broadcast level 5"
   notify: Save nxos.

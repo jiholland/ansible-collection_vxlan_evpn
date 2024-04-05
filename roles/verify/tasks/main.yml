@@ -7,12 +7,12 @@
     - name: Get OSPF neighbors.
       cisco.nxos.nxos_command:
         commands:
-          - show ip ospf neighbors
+          - "show ip ospf neighbors"
       register: __verify_ospf_neighbors
 
     - name: Print info about OSPF.
       ansible.builtin.debug:
-        msg: Spines should be neighbor with all leafs and border-leafs.
+        msg: "Spines should be neighbor with all leafs and border-leafs."
         verbosity: 0
       run_once: true
 
@@ -24,12 +24,12 @@
     - name: Get PIM neighbors.
       cisco.nxos.nxos_command:
         commands:
-          - show ip pim neighbor
+          - "show ip pim neighbor"
       register: __verify_pim_neighbors
 
     - name: Print info about PIM.
       ansible.builtin.debug:
-        msg: Spines should be neighbor with all leafs and border-leafs.
+        msg: "Spines should be neighbor with all leafs and border-leafs."
         verbosity: 0
       run_once: true
 
@@ -45,13 +45,13 @@
     - name: Get NVE Peers.
       cisco.nxos.nxos_command:
         commands:
-          - show nve peers
+          - "show nve peers"
       register: __verify_nve_peers
       when: verify_network_role is ansible.builtin.search('leaf')
 
     - name: Print info about NVE peers.
       ansible.builtin.debug:
-        msg: You will not see any peers before hosts-traffic has been initiated between peers.
+        msg: "You will not see any peers before hosts-traffic has been initiated between peers."
         verbosity: 0
       run_once: true
       when: verify_network_role is ansible.builtin.search('leaf')
@@ -66,14 +66,14 @@
     - name: Get EVPN BGP neigbors.
       cisco.nxos.nxos_command:
         commands:
-          - show bgp l2vpn evpn summary
+          - "show bgp l2vpn evpn summary"
       register: __verify_bgp_neighbors
 
     - name: Print info about EVPN BGP neighbors.
       ansible.builtin.debug:
-        msg:
-          - Spine (RR) should see all leafs and border-leafs as neighbors.
-          - Border-leafs should also see remote border-leafs in separate BGP AS as neighbors.
+        msg: |-
+          "Spine (RR) should see all leafs and border-leafs as neighbors."
+          "Border-leafs should also see remote border-leafs in separate BGP AS as neighbors."
         verbosity: 0
       run_once: true
 
@@ -90,7 +90,7 @@
     - name: Run VXLAN config-check.
       cisco.nxos.nxos_command:
         commands:
-          - show consistency-checker vxlan config-check
+          - "show consistency-checker vxlan config-check"
       register: __verify_config_check
       vars:
         ansible_command_timeout: "{{ __verify_vxlan_config_check_timeout }}"
@@ -109,12 +109,12 @@
     - name: Get MKA summary information.
       cisco.nxos.nxos_command:
         commands:
-          - show macsec mka summary
+          - "show macsec mka summary"
       register: __verify_macsec_mka_summary
 
     - name: Print info about macsec.
       ansible.builtin.debug:
-        msg: DCI interfaces should have status Secured.
+        msg: "DCI interfaces should have status Secured."
         verbosity: 0
       run_once: true
 

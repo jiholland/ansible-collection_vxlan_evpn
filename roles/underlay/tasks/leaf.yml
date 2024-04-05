@@ -86,14 +86,14 @@
     - name: leaf | Define a non-VXLAN enabled VLAN as backup routed path.
       cisco.nxos.nxos_config:
         lines:
-          - system nve infra-vlans {{ underlay_vpc_nve_vlan }}
+          - "system nve infra-vlans {{ underlay_vpc_nve_vlan }}"
       notify: Save nxos.
 
     - name: leaf | Create VLAN for NVE-infra.
       cisco.nxos.nxos_vlans:
         config:
           - vlan_id: "{{ underlay_vpc_nve_vlan }}"
-            name: BACKUP_VLAN_ROUTING_NVE_INFRA
+            name: "BACKUP_VLAN_ROUTING_NVE_INFRA"
         state: merged
       notify: Save nxos.
 
@@ -101,7 +101,7 @@
       cisco.nxos.nxos_interfaces:
         config:
           - name: "Vlan{{ underlay_vpc_nve_vlan }}"
-            description: BACKUP VLAN ROUTING NVE-INFRA
+            description: "BACKUP VLAN ROUTING NVE-INFRA"
             mtu: "{{ __underlay_mtu }}"
             enabled: true
         state: merged
@@ -110,7 +110,7 @@
     - name: leaf | Set IP address on SVI for NVE-infra.
       cisco.nxos.nxos_l3_interfaces:
         config:
-          - name: Vlan{{ underlay_vpc_nve_vlan }}
+          - name: "Vlan{{ underlay_vpc_nve_vlan }}"
             ipv4:
               - address: "{{ underlay_vpc_nve_ip }}/24"
             redirects: false
@@ -133,7 +133,7 @@
 
     - name: leaf | Ensure PIM sparse mode is running on NVE-infra interface.
       cisco.nxos.nxos_pim_interface:
-        interface: Vlan{{ underlay_vpc_nve_vlan }}
+        interface: "Vlan{{ underlay_vpc_nve_vlan }}"
         sparse: true
         state: present
       notify: Save nxos.

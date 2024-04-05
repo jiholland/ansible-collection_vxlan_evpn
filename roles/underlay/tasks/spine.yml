@@ -51,8 +51,8 @@
 - name: spine | Configure PIM RP in Anycast-RP set.
   cisco.nxos.nxos_config:
     lines:
-      - ip pim anycast-rp {{ underlay_pim_ip }} {{ underlay_rid_ip }}
-      - ip pim anycast-rp {{ underlay_pim_ip }} {{ underlay_pim_ip_remote }}
+      - "ip pim anycast-rp {{ underlay_pim_ip }} {{ underlay_rid_ip }}"
+      - "ip pim anycast-rp {{ underlay_pim_ip }} {{ underlay_pim_ip_remote }}"
   notify: Save nxos.
 
 - name: spine | Configure static PIM anycast RP for group range.

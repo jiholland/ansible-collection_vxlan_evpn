@@ -52,7 +52,7 @@
 - name: leaf | Create VXLAN VTEP (NVE) interface for BGP EVPN control plane. Use BGP for host reachability. Enable interface.
   cisco.nxos.nxos_vxlan_vtep:
     interface: nve1
-    description: VXLAN VTEP
+    description: "VXLAN VTEP"
     source_interface: "{{ overlay_vtep_if }}"
     host_reachability: true
     global_mcast_group_L2: "{{ overlay_global_mcast_group_l2 }}"
@@ -78,7 +78,7 @@
     - name: leaf | Advertise virtual-rmac in NVE interface.
       cisco.nxos.nxos_config:
         lines:
-          - advertise virtual-rmac  # Enter shutdown, no shutdown to take effect.
+          - "advertise virtual-rmac"
         parents:
-          - interface nve1
+          - "interface nve1"
       notify: Save nxos.
