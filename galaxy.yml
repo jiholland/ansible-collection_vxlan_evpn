@@ -1,7 +1,7 @@
 ---
 namespace: jiholland
 name: vxlan_evpn
-version: 24.3.0
+version: 24.3.1
 readme: README.md
 
 authors:

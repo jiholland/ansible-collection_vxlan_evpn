@@ -4,8 +4,8 @@
 - name: Assert that ansible_network_os is cisco.nxos.nxos.
   ansible.builtin.assert:
     that:
-      - ansible_network_os is eq('cisco.nxos.nxos')
-    fail_msg: ansible_network_os must be cisco.nxos.nxos
+      - "ansible_network_os is eq('cisco.nxos.nxos')"
+    fail_msg: "ansible_network_os must be cisco.nxos.nxos"
     quiet: true
 
 - name: Enable features for vPC.
@@ -69,10 +69,10 @@
 - name: Ensure vPC domain has peer-switch feature and IP ARP synchronize feature enabled.
   cisco.nxos.nxos_config:
     lines:
-      - ip arp synchronize
-      - ipv6 nd synchronize
+      - "ip arp synchronize"
+      - "ipv6 nd synchronize"
     parents:
-      - vpc domain {{ vpc_domain }}
+      - "vpc domain {{ vpc_domain }}"
   notify: Save nxos.
 
 - name: Set interface description and L2 mode on vPC peer link interfaces and enable interfaces.
@@ -119,7 +119,7 @@
     - name: Ensure spanning-tree bridge assurance is enabled.
       cisco.nxos.nxos_config:
         lines:
-          - spanning-tree bridge assurance
+          - "spanning-tree bridge assurance"
       when: not ansible_check_mode
 
     - name: Set STP port type to network.
@@ -131,7 +131,7 @@
 - name: Modify the STP hello-time, forward-time and max-age time.
   cisco.nxos.nxos_config:
     lines:
-      - spanning-tree vlan 1-3967 hello-time 4
-      - spanning-tree vlan 1-3967 forward-time 30
-      - spanning-tree vlan 1-3967 max-age 40
+      - "spanning-tree vlan 1-3967 hello-time 4"
+      - "spanning-tree vlan 1-3967 forward-time 30"
+      - "spanning-tree vlan 1-3967 max-age 40"
   notify: Save nxos.

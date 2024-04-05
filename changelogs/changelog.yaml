@@ -52,3 +52,13 @@ releases:
     - changed_when.yml
     - dci.yml
     release_date: '2024-03-05'
+  24.3.1:
+    changes:
+      minor_changes:
+      - all roles - use quotes for user-side strings such as descriptions, names,
+        and messages
+      - overlay and dci role - rmap tags should be list
+    fragments:
+    - quotes.yml
+    - tags.yml
+    release_date: '2024-04-05'

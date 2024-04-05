@@ -2,9 +2,9 @@
 galaxy_info:
   role_name: overlay
   author: Jørn Ivar Holland
-  description: Configure overlay for VXLAN with EVPN controller in multisite clos-network.
+  description: "Configure overlay for VXLAN with EVPN controller in multisite clos-network."
   license: BSD-3-Clause
-  min_ansible_version: '2.15'
+  min_ansible_version: "2.15"
   platforms:
     - name: NXOS
       versions:

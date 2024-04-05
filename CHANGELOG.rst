@@ -1,9 +1,17 @@
-==================================
-Jiholland.Vxlan_Evpn Release Notes
-==================================
+===================================
+Jiholland.Vxlan\_Evpn Release Notes
+===================================
 
 .. contents:: Topics
 
+v24.3.1
+=======
+
+Minor Changes
+-------------
+
+- all roles - use quotes for user-side strings such as descriptions, names, and messages
+- overlay and dci role - rmap tags should be list
 
 v24.3.0
 =======
@@ -62,3 +70,4 @@ Minor Changes
 
 v23.0.0
 =======
+

@@ -14,7 +14,7 @@ argument_specs:
           - border-leaf
 
       underlay_fabric_interfaces:
-        description: The fabric facing interfaces connecting spines to leafs.
+        description: "The fabric facing interfaces connecting spines to leafs."
         type: list
         required: true
         elements: dict
@@ -32,7 +32,7 @@ argument_specs:
         default: 32
 
       underlay_pim_ip:
-        description: Anycast RP address.
+        description: "Anycast RP address."
         type: str
         required: true
 
