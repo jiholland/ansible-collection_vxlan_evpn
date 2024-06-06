@@ -4,7 +4,7 @@
 - name: Assert that ansible_network_os is cisco.nxos.nxos.
   ansible.builtin.assert:
     that:
-      - "ansible_network_os is eq('cisco.nxos.nxos')"
+      - ansible_network_os is eq('cisco.nxos.nxos')
     fail_msg: "ansible_network_os must be cisco.nxos.nxos"
     quiet: true
 
