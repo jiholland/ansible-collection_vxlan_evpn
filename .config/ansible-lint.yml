@@ -1,0 +1,24 @@
+---
+profile: production
+
+offline: true
+
+extra_vars:
+  target: foobar
+
+skip_list:
+  - fqcn[canonical]
+
+enable_list:
+  - empty-string-compare # opt-in
+  - loop-var-prefix # opt-in
+  - name[prefix] # opt-in
+  - no-log-password # opt-in
+  - no-prompting # opt-in
+  - no-same-owner # opt-in
+
+exclude_paths:
+  - .cache/
+  - .git/
+  - .venv/
+  - changelogs/
