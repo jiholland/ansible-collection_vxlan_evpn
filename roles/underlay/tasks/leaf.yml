@@ -20,7 +20,7 @@
     state: merged
   notify: Save nxos.
 
-- name: leaf | Assign IP address and tag to L3 RID and VTEP loopback fabric interfaces.
+- name: leaf | Assign IP address to L3 RID and VTEP loopback interfaces.
   cisco.nxos.nxos_l3_interfaces:
     config: "{{ lookup('ansible.builtin.template', 'leaf_l3_interfaces.j2') | ansible.builtin.from_yaml }}"
     state: merged
