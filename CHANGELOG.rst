@@ -4,6 +4,16 @@ Jiholland.Vxlan\_Evpn Release Notes
 
 .. contents:: Topics
 
+v24.6.0
+=======
+
+Minor Changes
+-------------
+
+- all roles - assert quotes
+- ansible-lint - moved to .config
+- playbooks - added playbook dir
+
 v24.3.1
 =======
 

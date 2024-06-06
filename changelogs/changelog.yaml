@@ -62,3 +62,12 @@ releases:
     - quotes.yml
     - tags.yml
     release_date: '2024-04-05'
+  24.6.0:
+    changes:
+      minor_changes:
+      - all roles - assert quotes
+      - ansible-lint - moved to .config
+      - playbooks - added playbook dir
+    fragments:
+    - fix.yml
+    release_date: '2024-06-06'

@@ -14,20 +14,20 @@
     - name: encryption | Ensure key is hex.
       ansible.builtin.assert:
         that:
-          - "dci_macsec_key_string is ansible.builtin.regex('^[0-9a-fA-F]+$')"
+          - dci_macsec_key_string is ansible.builtin.regex('^[0-9a-fA-F]+$')
         fail_msg: "Key is not hex."
 
     - name: encryption | Ensure key length.
       ansible.builtin.assert:
         that:
-          - "dci_macsec_key_string | length is eq(64)"
+          - dci_macsec_key_string | length is eq(64)
         fail_msg: "Key must be 64 digits."
       when: dci_macsec_key_algorithm is eq('AES_256_CMAC')
 
     - name: encryption | Ensure key length.
       ansible.builtin.assert:
         that:
-          - "dci_macsec_key_string | length is le(32)"
+          - dci_macsec_key_string | length is le(32)
         fail_msg: "Key must be between 1 and 32 digits."
       when: dci_macsec_key_algorithm is eq('AES_128_CMAC')
 
