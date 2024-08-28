@@ -4,6 +4,14 @@ Jiholland.Vxlan\_Evpn Release Notes
 
 .. contents:: Topics
 
+v24.8.0
+=======
+
+Bugfixes
+--------
+
+- vpc role - added missing peer-switch command
+
 v24.6.0
 =======
 

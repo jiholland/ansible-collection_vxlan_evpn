@@ -69,6 +69,7 @@
 - name: Ensure vPC domain has peer-switch feature and IP ARP synchronize feature enabled.
   cisco.nxos.nxos_config:
     lines:
+      - "peer-switch"
       - "ip arp synchronize"
       - "ipv6 nd synchronize"
     parents:
