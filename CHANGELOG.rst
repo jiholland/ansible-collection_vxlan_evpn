@@ -4,6 +4,14 @@ Jiholland.Vxlan\_Evpn Release Notes
 
 .. contents:: Topics
 
+v24.11.0
+========
+
+Minor Changes
+-------------
+
+- added collection requirements
+
 v24.8.0
 =======
 
