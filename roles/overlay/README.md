@@ -1,5 +1,5 @@
-🏭 jiholland.overlay
-====================
+jiholland.overlay
+==================
 
 Configure overlay for multisite VXLAN-EVPN fabric on Cisco Nexus platform:
 - iBGP EVPN control plane.
@@ -27,13 +27,13 @@ Configure overlay for multisite VXLAN-EVPN fabric on Cisco Nexus platform:
 + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                  Distributed Anycast Gateway                 |
 |                    GW IP 198.51.100.1
-                    GW MAC 0000.5E00.5300                    |
+                    GW MAC 2020.DEAD.BEEF                    |
 + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ```
 Requirements
 ------------
 
-💿 [Cisco NXOS Collection](https://galaxy.ansible.com/ui/repo/published/cisco/nxos)
+[Cisco NXOS Collection](https://galaxy.ansible.com/ui/repo/published/cisco/nxos)
 
 Role Variables
 --------------

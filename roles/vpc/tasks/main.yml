@@ -21,25 +21,25 @@
   notify: Save nxos.
 
 - name: Create tenant VRF context for vPC keepalive.
-  cisco.nxos.nxos_vrf:
-    name: "{{ vpc_keepalive_vrf }}"
-    state: present
+  cisco.nxos.nxos_vrf_global:
+    config:
+      vrfs:
+        - name: "{{ vpc_keepalive_vrf }}"
+    state: replaced
   notify: Save nxos.
 
 - name: Associate vPC keepalive interface to tenant VRF.
-  cisco.nxos.nxos_vrf_interface:
-    vrf: "{{ vpc_keepalive_vrf }}"
-    interface: "{{ vpc_keepalive_if }}"
-    state: present
-  notify: Save nxos.
-
-- name: Ensure L3 interface for vPC keepalive link is enabled.
-  cisco.nxos.nxos_interfaces:
+  cisco.nxos.nxos_vrf_interfaces:
     config:
       - name: "{{ vpc_keepalive_if }}"
-        mode: layer3
-        enabled: true
-    state: merged
+        vrf_name: "{{ vpc_keepalive_vrf }}"
+    state: replaced
+  notify: Save nxos.
+
+- name: Set interface description and L2 mode on vPC peer link interfaces and enable interfaces. Ensure L3 mode for vPC keepalive link.
+  cisco.nxos.nxos_interfaces:
+    config: "{{ lookup('ansible.builtin.template', 'interfaces.j2') | ansible.builtin.from_yaml }}"
+    state: replaced
   notify: Save nxos.
 
 - name: Set IP address on vPC keepalive interface.
@@ -48,7 +48,7 @@
       - name: "{{ vpc_keepalive_if }}"
         ipv4:
           - address: "{{ vpc_keepalive_ip_src }}/24"
-    state: merged
+    state: replaced
   notify: Save nxos.
 
 - name: Configure vPC domain with priority and auto-recovery. Ensure keepalive link is configured with existing keepalive VRF. Ensure delay-restore.
@@ -60,26 +60,20 @@
     role_priority: "{{ vpc_priority }}"
     system_priority: 2000
     peer_gw: true
+    peer_sw: true
     auto_recovery: true
     delay_restore: "{{ __vpc_delay_restore }}"
     delay_restore_interface_vlan: "{{ __vpc_svi_delay_restore }}"
     state: present
   notify: Save nxos.
 
-- name: Ensure vPC domain has peer-switch feature and IP ARP synchronize feature enabled.
+- name: Ensure vPC domain has IP ARP synchronize feature enabled.
   cisco.nxos.nxos_config:
     lines:
-      - "peer-switch"
       - "ip arp synchronize"
       - "ipv6 nd synchronize"
     parents:
       - "vpc domain {{ vpc_domain }}"
-  notify: Save nxos.
-
-- name: Set interface description and L2 mode on vPC peer link interfaces and enable interfaces.
-  cisco.nxos.nxos_interfaces:
-    config: "{{ lookup('ansible.builtin.template', 'interfaces.j2') | ansible.builtin.from_yaml }}"
-    state: merged
   notify: Save nxos.
 
 - name: Create native VLAN for vPC peer link interfaces.
@@ -87,7 +81,7 @@
     config:
       - vlan_id: "{{ vpc_native_vlan_id }}"
         name: "{{ vpc_native_vlan_name }}"
-    state: merged
+    state: replaced
   notify: Save nxos.
 
 - name: Configure Port-Channel for vPC peer link in mode active and add members to it.
@@ -103,36 +97,17 @@
         mode: trunk
         trunk:
           native_vlan: "{{ vpc_native_vlan_id }}"
-    state: merged
+    state: replaced
   notify: Save nxos.
 
 - name: Configure Port-Channel as vPC peer link.
   cisco.nxos.nxos_vpc_interface:
     peer_link: true
-    portchannel: "{{ vpc_peerlink_lag_name | ansible.builtin.regex_search('[0-9]+') }}"  # Extract ID from port-channel.
+    portchannel: "{{ vpc_peerlink_lag_name | ansible.builtin.regex_search('[0-9]+') }}"
     state: present
   notify: Save nxos.
 
-
-- name: Set STP port type to network for vPC peer link interfaces.
-  block:
-
-    - name: Ensure spanning-tree bridge assurance is enabled.
-      cisco.nxos.nxos_config:
-        lines:
-          - "spanning-tree bridge assurance"
-      when: not ansible_check_mode
-
-    - name: Set STP port type to network.
-      cisco.nxos.nxos_config:
-        src: stp_interfaces.j2
-      notify: Save nxos.
-
-
-- name: Modify the STP hello-time, forward-time and max-age time.
-  cisco.nxos.nxos_config:
-    lines:
-      - "spanning-tree vlan 1-3967 hello-time 4"
-      - "spanning-tree vlan 1-3967 forward-time 30"
-      - "spanning-tree vlan 1-3967 max-age 40"
+- name: Ensure STP bridge assurance is enabled. Set STP port type to network. Modify STP hello, forward and max-age time.
+  ansible.netcommon.cli_config:
+    config: "{{ lookup('ansible.builtin.template', 'spanning_tree.j2') }}"
   notify: Save nxos.

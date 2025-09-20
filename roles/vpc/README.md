@@ -1,12 +1,12 @@
-👯 jiholland.vpc
-================
+jiholland.vpc
+==============
 
 Configure a pair of Cisco Nexus devices in virtual Port Channel (vPC).
 
 Requirements
 ------------
 
-💿 [Cisco NXOS Collection](https://galaxy.ansible.com/ui/repo/published/cisco/nxos)
+[Cisco NXOS Collection](https://galaxy.ansible.com/ui/repo/published/cisco/nxos)
 
 Role Variables
 --------------

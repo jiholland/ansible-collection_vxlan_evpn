@@ -1,5 +1,5 @@
-🏭 jiholland.dci
-================
+jiholland.dci
+==============
 
 Configure DCI for multisite VXLAN-EVPN fabric on Cisco Nexus platform:
 - Border-leafs in vPC.
@@ -10,7 +10,7 @@ Configure DCI for multisite VXLAN-EVPN fabric on Cisco Nexus platform:
 Requirements
 ------------
 
-💿 [Cisco NXOS Collection](https://galaxy.ansible.com/ui/repo/published/cisco/nxos)
+[Cisco NXOS Collection](https://galaxy.ansible.com/ui/repo/published/cisco/nxos)
 
 Role Variables
 --------------

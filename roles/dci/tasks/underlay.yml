@@ -40,8 +40,8 @@
   notify: Save nxos.
 
 - name: underlay | Ensure medium p2p for DCI interfacs.
-  cisco.nxos.nxos_config:
-    src: underlay_p2p.j2
+  ansible.netcommon.cli_config:
+    config: "{{ lookup('ansible.builtin.template', 'underlay_p2p.j2') }}"
   notify: Save nxos.
 
 - name: underlay | Assign IP address to DCI interfaces.

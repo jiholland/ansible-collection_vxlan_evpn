@@ -27,8 +27,8 @@
   notify: Save nxos.
 
 - name: leaf | Ensure physical L3 fabric interfaces have medium p2p and IP unnumbered parameters.
-  cisco.nxos.nxos_config:
-    src: p2p.j2
+  ansible.netcommon.cli_config:
+    config: "{{ lookup('ansible.builtin.template', 'p2p.j2') }}"
   notify: Save nxos.
 
 - name: leaf | Set OSPF Process-ID and Router-ID and log adjacency changes.
@@ -80,7 +80,7 @@
 
 
 - name: leaf | Use vPC Peer-link as underlay backup path.
-  when: vpc_domain is defined
+  when: underlay_vpc_domain is defined
   block:
 
     - name: leaf | Define a non-VXLAN enabled VLAN as backup routed path.

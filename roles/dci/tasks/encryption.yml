@@ -32,6 +32,6 @@
       when: dci_macsec_key_algorithm is eq('AES_128_CMAC')
 
 - name: encryption | Configure MACsec keychain and key. Apply MACsec policy to DCI-interfaces.
-  cisco.nxos.nxos_config:
-    src: encryption.j2
+  ansible.netcommon.cli_config:
+    config: "{{ lookup('ansible.builtin.template', 'encryption.j2') }}"
   no_log: true

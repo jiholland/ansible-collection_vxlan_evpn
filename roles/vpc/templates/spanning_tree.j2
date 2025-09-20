@@ -1,0 +1,10 @@
+spanning-tree bridge assurance
+interface {{ vpc_peerlink_lag_name }}
+  spanning-tree port type network
+{% for vpc_item in vpc_peerlink_lag_members %}
+interface {{ vpc_item }}
+  spanning-tree port type network
+{% endfor %}
+spanning-tree vlan 1-3967 hello-time 4
+spanning-tree vlan 1-3967 forward-time 30
+spanning-tree vlan 1-3967 max-age 40

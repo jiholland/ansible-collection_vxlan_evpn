@@ -85,3 +85,12 @@ releases:
     fragments:
     - vpc.yml
     release_date: '2024-08-28'
+  25.9.0:
+    changes:
+      major_changes:
+      - bumb min required ansible to 2.16
+      minor_changes:
+      - all roles - support ansible 2.19
+    fragments:
+    - fix.yml
+    release_date: '2025-09-20'

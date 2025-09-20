@@ -27,8 +27,8 @@
   notify: Save nxos.
 
 - name: spine | Ensure physical L3 fabric interfaces have medium p2p and IP unnumbered parameters.
-  cisco.nxos.nxos_config:
-    src: p2p.j2
+  ansible.netcommon.cli_config:
+    config: "{{ lookup('ansible.builtin.template', 'p2p.j2') }}"
   notify: Save nxos.
 
 - name: spine | Set OSPF Process-ID and Router-ID and log adjacency changes.

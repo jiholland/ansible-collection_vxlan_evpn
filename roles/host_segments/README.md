@@ -1,5 +1,5 @@
-🏭 jiholland.host_segments
-==========================
+jiholland.host_segments
+=======================
 
 Configure host segments for multisite VXLAN-EVPN fabric on Cisco Nexus platform.<br>
 
@@ -76,7 +76,7 @@ Note: BUM between sites (dci) are always ingress-replicated (unicast).
 Requirements
 ------------
 
-💿 [Cisco NXOS Collection](https://galaxy.ansible.com/ui/repo/published/cisco/nxos)
+[Cisco NXOS Collection](https://galaxy.ansible.com/ui/repo/published/cisco/nxos)
 
 Role Variables
 --------------
