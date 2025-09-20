@@ -16,5 +16,7 @@ overlay_vtep_if: loopback1
 #   - name: SPINE-2
 #     ip: 192.0.2.31
 
-overlay_anycast_gw_mac: 0000.5E00.5300
-overlay_global_mcast_group_l2: 233.252.0.239
+overlay_anycast_gw_mac: 2020.DEAD.BEEF
+overlay_global_mcast_group_l2: 239.239.239.239
+
+# overlay_vpc_domain: 1

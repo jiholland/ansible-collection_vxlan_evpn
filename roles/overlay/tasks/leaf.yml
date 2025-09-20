@@ -61,7 +61,7 @@
   notify: Save nxos.
 
 - name: leaf | Configure vPC multihoming.
-  when: vpc_domain is defined
+  when: overlay_vpc_domain is defined
   block:
 
     - name: leaf | Advertise PIP in BGP process.

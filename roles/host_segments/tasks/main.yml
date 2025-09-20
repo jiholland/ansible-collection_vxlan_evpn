@@ -6,8 +6,8 @@
   block:
 
     - name: Configure tenant VRFs.
-      cisco.nxos.nxos_config:
-        src: host_vrfs.j2
+      ansible.netcommon.cli_config:
+        config: "{{ lookup('ansible.builtin.template', 'host_vrfs.j2') }}"
       vars:
         ansible_command_timeout: "{{ __host_segments_timeout }}"
         ansible_connect_timeout: "{{ __host_segments_timeout }}"
@@ -15,8 +15,8 @@
       notify: Save nxos.
 
     - name: Configure host segments with distributed anycast gateway.
-      cisco.nxos.nxos_config:
-        src: host_segments_l3.j2
+      ansible.netcommon.cli_config:
+        config: "{{ lookup('ansible.builtin.template', 'host_segments_l3.j2') }}"
       vars:
         ansible_command_timeout: "{{ __host_segments_timeout }}"
         ansible_connect_timeout: "{{ __host_segments_timeout }}"
@@ -24,8 +24,8 @@
       notify: Save nxos.
 
     - name: Configure host segments without distributed anycast gateway.
-      cisco.nxos.nxos_config:
-        src: host_segments_l2.j2
+      ansible.netcommon.cli_config:
+        config: "{{ lookup('ansible.builtin.template', 'host_segments_l2.j2') }}"
       vars:
         ansible_command_timeout: "{{ __host_segments_timeout }}"
         ansible_connect_timeout: "{{ __host_segments_timeout }}"

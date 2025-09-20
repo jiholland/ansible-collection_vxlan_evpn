@@ -4,7 +4,7 @@
 - name: {{ underlay_vtep_if }}
   ipv4:
     - address: {{ underlay_vtep_ip }}/{{ underlay_vtep_mask }}
-{% if vpc_domain is defined %}
+{% if underlay_vpc_domain is defined %}
     - address: {{ underlay_vtep_secondary_ip }}/{{ underlay_vtep_mask }}
       secondary: true
 {% endif %}

@@ -87,7 +87,7 @@
   when: verify_network_role is ansible.builtin.search('leaf')
   block:
 
-    - name: Run VXLAN config-check.
+    - name: Run VXLAN config-check. Must have host segments.
       cisco.nxos.nxos_command:
         commands:
           - "show consistency-checker vxlan config-check"

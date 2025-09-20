@@ -4,6 +4,19 @@ Jiholland.Vxlan\_Evpn Release Notes
 
 .. contents:: Topics
 
+v25.9.0
+=======
+
+Major Changes
+-------------
+
+- bumb min required ansible to 2.16
+
+Minor Changes
+-------------
+
+- all roles - support ansible 2.19
+
 v24.11.0
 ========
 
