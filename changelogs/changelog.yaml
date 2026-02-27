@@ -94,3 +94,11 @@ releases:
     fragments:
     - fix.yml
     release_date: '2025-09-20'
+  26.2.0:
+    changes:
+      bugfixes:
+      - underlay role - add dci routemap tag to border-leafs
+      - vpc role - use state merged for vpc peer link
+    fragments:
+    - fix.yml
+    release_date: '2026-02-27'

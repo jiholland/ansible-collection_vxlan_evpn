@@ -97,7 +97,7 @@
         mode: trunk
         trunk:
           native_vlan: "{{ vpc_native_vlan_id }}"
-    state: replaced
+    state: merged
   notify: Save nxos.
 
 - name: Configure Port-Channel as vPC peer link.

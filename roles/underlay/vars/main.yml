@@ -5,3 +5,5 @@ __underlay_mtu: 9216
 
 __underlay_ospf_area_id: 0.0.0.0
 __underlay_ospf_process_id: UNDERLAY
+
+__underlay_dci_route_map_tag: 54321

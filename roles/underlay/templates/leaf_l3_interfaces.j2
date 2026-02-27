@@ -1,6 +1,9 @@
 - name: {{ underlay_rid_if }}
   ipv4:
     - address: {{ underlay_rid_ip }}/{{ underlay_rid_mask }}
+{% if underlay_network_role is eq('border-leaf') %}
+      tag: {{ __underlay_dci_route_map_tag }}
+{% endif %}
 - name: {{ underlay_vtep_if }}
   ipv4:
     - address: {{ underlay_vtep_ip }}/{{ underlay_vtep_mask }}
