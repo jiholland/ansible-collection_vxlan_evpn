@@ -4,6 +4,15 @@ Jiholland.Vxlan\_Evpn Release Notes
 
 .. contents:: Topics
 
+v26.2.0
+=======
+
+Bugfixes
+--------
+
+- underlay role - add dci routemap tag to border-leafs
+- vpc role - use state merged for vpc peer link
+
 v25.9.0
 =======
 

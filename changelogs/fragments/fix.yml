@@ -1,3 +1,0 @@
-bugfixes:
-  - vpc role - use state merged for vpc peer link
-  - underlay role - add dci routemap tag to border-leafs
