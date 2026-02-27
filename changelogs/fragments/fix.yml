@@ -1,0 +1,2 @@
+bugfixes:
+  - vpc role - use state merged for vpc peer link
